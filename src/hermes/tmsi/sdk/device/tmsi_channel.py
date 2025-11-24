@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,23 +22,22 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file tmsi_channel.py 
- * @brief 
+ * @file tmsi_channel.py
+ * @brief
  * TMSi Channel interface.
  */
 
 
-'''
+"""
 
 from .tmsi_device_enums import ChannelType
 
 
 class TMSiChannel:
-    """Class to handle the interface of TMSi channel.
-    """
+    """Class to handle the interface of TMSi channel."""
+
     def __init__(self):
-        """Initialize the TMSi channel.
-        """
+        """Initialize the TMSi channel."""
         self._alt_name = "-"
         self._chan_bandwidth = 0
         self._chan_divider = -1
@@ -60,7 +59,7 @@ class TMSiChannel:
         :rtype: int
         """
         return self._chan_bandwidth
-    
+
     def get_channel_divider(self):
         """Get channel divider.
 
@@ -116,7 +115,7 @@ class TMSiChannel:
         :rtype: int
         """
         return self._sample_rate
-    
+
     def get_channel_type(self):
         """Get channel type.
 
@@ -132,7 +131,7 @@ class TMSiChannel:
         :rtype: str
         """
         return self._unit_name
-    
+
     def is_reference(self):
         """Get if the channel is a reference channel.
 
@@ -149,9 +148,9 @@ class TMSiChannel:
 
         :raises NotImplementedError: Must be overridden by the child class.
         """
-        raise NotImplementedError('method not available for this channel')
+        raise NotImplementedError("method not available for this channel")
 
-    def set_channel_divider(self, base_sample_rate, divider = -1):
+    def set_channel_divider(self, base_sample_rate, divider=-1):
         """Set channel divider
 
         :param base_sample_rate: base sample rate of the device
@@ -161,8 +160,8 @@ class TMSiChannel:
         """
         self._chan_divider = int(divider)
         if divider > -1:
-            self._sample_rate = int(base_sample_rate) // (2 ** divider)
-    
+            self._sample_rate = int(base_sample_rate) // (2**divider)
+
     def set_channel_index(self, index):
         """Set channel index
 
@@ -170,8 +169,10 @@ class TMSiChannel:
         :type index: int
         """
         self._index = index
-    
-    def set_channel_name(self, default_channel_name = None, alternative_channel_name = None):
+
+    def set_channel_name(
+        self, default_channel_name=None, alternative_channel_name=None
+    ):
         """Set the names of the channel
 
         :param default_channel_name: default name, defaults to None

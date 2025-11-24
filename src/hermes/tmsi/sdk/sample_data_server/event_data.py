@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,17 +22,18 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file event_data.py 
- * @brief 
+ * @file event_data.py
+ * @brief
  * Event data structure.
  */
 
 
-'''
+"""
+
 
 class EventData:
-    """Class to handle the event data.
-    """
+    """Class to handle the event data."""
+
     def __init__(self, event: "TMSiEvent"):
         """Initialize the Event data.
 
@@ -41,9 +42,10 @@ class EventData:
         """
         self.event = event
 
+
 class EventDataConsumer:
-    """Class to handle the event data consumers.
-    """
+    """Class to handle the event data consumers."""
+
     def __init__(self, id, q):
         """Initialize the event data consumer.
 

@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2022 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file sampling_thread.py 
- * @brief 
+ * @file sampling_thread.py
+ * @brief
  * Sampling Thread interface
  */
 
 
-'''
+"""
 
 import threading
 import time
@@ -36,7 +36,8 @@ import time
 
 class TMSiThread(threading.Thread):
     """A class to handle all the sampling threads."""
-    def __init__(self, looping_function, pause = 0.01, name = "TMSi Thread"):
+
+    def __init__(self, looping_function, pause=0.01, name="TMSi Thread"):
         """_summary_
 
         :param looping_function: the function which must be exectuted.
@@ -58,10 +59,9 @@ class TMSiThread(threading.Thread):
         :rtype: float
         """
         return self._pause
-    
+
     def run(self):
-        """Run the thread.
-        """
+        """Run the thread."""
         self._looping = True
         while self._looping:
             self._looping_function()
@@ -76,6 +76,5 @@ class TMSiThread(threading.Thread):
         self._pause = pause
 
     def stop(self):
-        """Stop the thread.
-        """
+        """Stop the thread."""
         self._looping = False

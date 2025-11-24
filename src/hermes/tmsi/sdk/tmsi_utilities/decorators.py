@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file decorators.py 
- * @brief 
+ * @file decorators.py
+ * @brief
  * Decorator class to handle decorative functions.
  */
 
 
-'''
+"""
 
 import time
 import os
@@ -51,13 +51,17 @@ def LogPerformances(func):
             tic = time.perf_counter()
             response = func(*args, **kwargs)
             toc = time.perf_counter()
-            TMSiLoggerPerformance().log("{} | {}: {:.3f} ms".format(env, func.__qualname__, (toc - tic)*1_000))
+            TMSiLoggerPerformance().log(
+                "{} | {}: {:.3f} ms".format(env, func.__qualname__, (toc - tic) * 1_000)
+            )
         else:
             response = func(*args, **kwargs)
         return response
+
     return performance_logger
 
-def Retry(n_retry : int):
+
+def Retry(n_retry: int):
     def retry_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -66,11 +70,17 @@ def Retry(n_retry : int):
                     return func(*args, **kwargs)
                 except Exception as exec:
                     last_exception = exec
-                    TMSiLogger().warning("Retry: {} - {}".format(func.__qualname__, exec))
+                    TMSiLogger().warning(
+                        "Retry: {} - {}".format(func.__qualname__, exec)
+                    )
                 time.sleep(0.5)
             if last_exception:
                 raise last_exception
             else:
-                raise ValueError("{} failed but no exception was raised.".format(func.__qualname__))
+                raise ValueError(
+                    "{} failed but no exception was raised.".format(func.__qualname__)
+                )
+
         return wrapper
+
     return retry_decorator

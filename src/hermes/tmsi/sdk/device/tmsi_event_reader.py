@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,19 +22,21 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file tmsi_event_reader.py 
- * @brief 
+ * @file tmsi_event_reader.py
+ * @brief
  * Event reader interface.
  */
 
 
-'''
+"""
 
 from .tmsi_thread import TMSiThread
 
+
 class TMSiEventReader:
     """A class to interface TMSi event readers."""
-    def __init__(self, name = "Event Reader"):
+
+    def __init__(self, name="Event Reader"):
         """Initialize the event reader.
 
         :param name: name of the event reader, defaults to "Event Reader"
@@ -42,9 +44,9 @@ class TMSiEventReader:
         """
         self._name = name
         self._reading_thread = TMSiThread(
-            looping_function = self._reading_function,
-            pause = 0.5)
-    
+            looping_function=self._reading_function, pause=0.5
+        )
+
     def start(self):
         """Start the event reader.
 
@@ -53,10 +55,9 @@ class TMSiEventReader:
         raise NotImplementedError("method not available for this reader")
 
     def stop(self):
-        """Stop the event reader.
-        """
+        """Stop the event reader."""
         self._reading_thread.stop()
         self._reading_thread.join()
-        
+
     def _reading_function(self):
         raise NotImplementedError("method not available for this reader")

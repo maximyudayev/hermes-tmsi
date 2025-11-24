@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_config.py 
- * @brief 
+ * @file apex_config.py
+ * @brief
  * APEX Configuration object.
  */
 
 
-'''
+"""
 
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
@@ -36,11 +36,12 @@ from xml.dom import minidom
 from .....tmsi_utilities.tmsi_logger import TMSiLogger
 from ..apex_API_enums import *
 
-class ApexConfig():
+
+class ApexConfig:
     """Class to handle the configuration of the Apex."""
+
     def __init__(self):
-        """Initialize the configuration.
-        """
+        """Initialize the configuration."""
         self.__base_sample_rate = ApexBaseSampleRate.Decimal
         self.__channels = []
         self.__impedance_channels = []
@@ -59,15 +60,23 @@ class ApexConfig():
         try:
             root = ET.Element("ApexConfig")
             xml_device = ET.SubElement(root, "Device")
-            ET.SubElement(xml_device, "BaseSampleRate").text = str(self.__base_sample_rate)
-            ET.SubElement(xml_device, "ImpedanceLimit").text = str(self.__impedance_limit)
+            ET.SubElement(xml_device, "BaseSampleRate").text = str(
+                self.__base_sample_rate
+            )
+            ET.SubElement(xml_device, "ImpedanceLimit").text = str(
+                self.__impedance_limit
+            )
             ET.SubElement(xml_device, "LiveImpedance").text = str(self.__live_impedance)
             xml_channels = ET.SubElement(root, "Channels")
             for idx, channel in enumerate(self.__channels):
                 xml_channel = ET.SubElement(xml_channels, "Channel")
                 ET.SubElement(xml_channel, "ChanIdx").text = str(idx)
-                ET.SubElement(xml_channel, "AltChanName").text = channel.get_channel_name()
-                ET.SubElement(xml_channel, "ReferenceStatus").text = str(channel.is_reference()) 
+                ET.SubElement(xml_channel, "AltChanName").text = (
+                    channel.get_channel_name()
+                )
+                ET.SubElement(xml_channel, "ReferenceStatus").text = str(
+                    channel.is_reference()
+                )
             xml_data = ApexConfig.__prettify(root)
             xml_file = open(filename, "w")
             xml_file.write(xml_data)
@@ -87,13 +96,15 @@ class ApexConfig():
         try:
             tree = ET.parse(filename)
             root = tree.getroot()
-            
+
             # check device type
             if root.tag != "ApexConfig":
-                error_message = "IMPOSSIBLE TO LOAD FILE! It is not a APEX configuration file."
+                error_message = (
+                    "IMPOSSIBLE TO LOAD FILE! It is not a APEX configuration file."
+                )
                 TMSiLogger().warning(error_message)
                 return False, error_message
-            
+
             # check if imported file has the correct number of channels
             channel_counter = 0
             for elem in root:
@@ -105,14 +116,16 @@ class ApexConfig():
                 # all good, configuring only the device
                 pass
             elif channel_counter < n_channels:
-                error_message = "Configuration file loaded does not have the full list of channels."
+                error_message = (
+                    "Configuration file loaded does not have the full list of channels."
+                )
                 TMSiLogger().warning(error_message)
                 return False, error_message
             elif channel_counter > n_channels:
                 error_message = "Configuration file loaded is not compatible with the device in use, too many channels set."
                 TMSiLogger().warning(error_message)
                 return False, error_message
-            
+
             # fill configuration structure
             for elem in root:
                 for subelem in elem:
@@ -131,17 +144,19 @@ class ApexConfig():
                                 continue
                             idx = int(idx.text)
                             self.__channels[idx].set_channel_name(
-                                alternative_channel_name = subelem.find("AltChanName").text
+                                alternative_channel_name=subelem.find(
+                                    "AltChanName"
+                                ).text
                             )
                             reference = subelem.find("ReferenceStatus").text
-                            if reference != 'None':
+                            if reference != "None":
                                 self.__channels[idx].set_reference(int(reference))
                             else:
                                 self.__channels[idx].set_reference(0)
             return True, None
         except Exception as exec:
             return False, error_message
-    
+
     def get_channels(self):
         """Get channels of the device.
 
@@ -157,7 +172,7 @@ class ApexConfig():
         :rtype: list[ApexImpedanceChannel]
         """
         return self.__impedance_channels
-    
+
     def get_impedance_limit(self):
         """Get the impedance limit.
 
@@ -189,7 +204,7 @@ class ApexConfig():
         :rtype: int
         """
         return self.__sampling_frequency
-    
+
     def set_channels(self, channels):
         """Set channels of the device
 
@@ -205,7 +220,7 @@ class ApexConfig():
         :type channels: list[ApexImpedanceChannel]
         """
         self.__impedance_channels = channels
-        
+
     def set_device_sampling_config(self, device_sampling_config):
         """Set device sampling configuration
 
@@ -225,9 +240,7 @@ class ApexConfig():
         self.__sampling_frequency = sampling_frequency
 
     def __prettify(elem):
-        """Return a pretty-printed XML string for the Element.
-        """
-        rough_string = ET.tostring(elem, 'utf-8')
+        """Return a pretty-printed XML string for the Element."""
+        rough_string = ET.tostring(elem, "utf-8")
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
-

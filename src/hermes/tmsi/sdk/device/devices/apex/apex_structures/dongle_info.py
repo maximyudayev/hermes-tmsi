@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,20 +22,21 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file dongle_info.py 
- * @brief 
+ * @file dongle_info.py
+ * @brief
  * APEX Dongle information.
  */
 
 
-'''
+"""
 
 from .apex_const import ApexConst
 
-class DongleInfo():
+
+class DongleInfo:
     """Class to handle the Dongle information."""
+
     def __init__(self):
-        """Initialize the dongle information.
-        """
+        """Initialize the dongle information."""
         self.TMSiDongleID = ApexConst.TMSI_DONGLE_ID_NONE
         self.SerialNumber = ApexConst.TMSI_DONGLE_ID_NONE

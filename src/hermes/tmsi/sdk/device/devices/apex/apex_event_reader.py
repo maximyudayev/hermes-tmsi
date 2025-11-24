@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_event_reader.py 
- * @brief 
+ * @file apex_event_reader.py
+ * @brief
  * APEX Event reader.
  */
 
 
-'''
+"""
 
 from ctypes import c_ushort, pointer
 
@@ -37,8 +37,10 @@ from ...tmsi_event_reader import TMSiEventReader
 from .apex_device import ApexDevice, TMSiEvent
 from ....tmsi_utilities.tmsi_logger import TMSiLogger
 
+
 class ApexEventReader(TMSiEventReader):
     """A class to handle events from Apex"""
+
     def __init__(self, name="Apex Event Reader"):
         """Initialize the event reader.
 
@@ -61,5 +63,5 @@ class ApexEventReader(TMSiEventReader):
             TMSiLogger().warning("An event occurred")
             event = TMSiEvent()
             ApexDevice.get_event(pointer(event))
-            SampleDataServer().put_event_data(id = event.TMSiDeviceID, data = event)
+            SampleDataServer().put_event_data(id=event.TMSiDeviceID, data=event)
             num_events.value -= 1

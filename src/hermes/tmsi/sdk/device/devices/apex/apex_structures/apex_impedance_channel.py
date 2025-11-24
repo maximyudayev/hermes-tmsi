@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,18 +22,20 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_impedance_channel.py 
- * @brief 
+ * @file apex_impedance_channel.py
+ * @brief
  * APEX Impedance Channel object.
  */
 
 
-'''
+"""
 
 from ....tmsi_impedance_channel import TMSiImpedanceChannel
 
+
 class ApexImpedanceChannel(TMSiImpedanceChannel):
     """Class to handle the Apex impedance channel"""
+
     def __init__(self, channel_metadata):
         """Initialize the channel.
 
@@ -49,7 +51,7 @@ class ApexImpedanceChannel(TMSiImpedanceChannel):
         :rtype: int
         """
         return self._channel_index
-    
+
     def get_channel_unit_name(self):
         """Get the unit of measurement of the channel.
 
@@ -57,7 +59,7 @@ class ApexImpedanceChannel(TMSiImpedanceChannel):
         :rtype: tuple(str, str)
         """
         return (self._impedance_re_unit, self._impedance_im_unit)
-    
+
     def set_device_impedance_channel_metadata(self, channel_metadata):
         """Set the impedance channel metadata.
 

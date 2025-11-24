@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file download_measurement.py 
- * @brief 
+ * @file download_measurement.py
+ * @brief
  * Class to handle the download of a file from the device.
  */
 
 
-'''
+"""
 
 from .....tmsi_utilities.decorators import LogPerformances
 from .....tmsi_utilities.tmsi_logger import TMSiLoggerActivity
@@ -37,7 +37,14 @@ from .signal_measurement import SignalMeasurement
 
 class DownloadMeasurement(SignalMeasurement):
     """Class to handle the download measurements."""
-    def __init__(self, dev, file_id: int, n_of_samples: int = None, name:str = "Download Measurement"):
+
+    def __init__(
+        self,
+        dev,
+        file_id: int,
+        n_of_samples: int = None,
+        name: str = "Download Measurement",
+    ):
         """Initialize the download measurement.
 
         :param dev: Device to download from.
@@ -60,25 +67,31 @@ class DownloadMeasurement(SignalMeasurement):
 
     @LogPerformances
     def start(self):
-        """Start the measurement.
-        """
+        """Start the measurement."""
         self._dev.reset_device_data_buffer()
-        TMSiLoggerActivity().log("{}->>SAGA-SDK: set device download request ON".format(self.get_name()))
-        self._dev.set_device_download_file_request(file_id = self._file_id, download = True)
+        TMSiLoggerActivity().log(
+            "{}->>SAGA-SDK: set device download request ON".format(self.get_name())
+        )
+        self._dev.set_device_download_file_request(file_id=self._file_id, download=True)
         TMSiLoggerActivity().log("{}->>Sampling Thread: start".format(self.get_name()))
         self._sampling_thread.start()
-        TMSiLoggerActivity().log("{}->>Conversion Thread: start".format(self.get_name()))
+        TMSiLoggerActivity().log(
+            "{}->>Conversion Thread: start".format(self.get_name())
+        )
         self._conversion_thread.start()
 
     @LogPerformances
     def stop(self):
-        """Stop the measurement.
-        """
+        """Stop the measurement."""
         self._sampling_thread.stop()
         self._sampling_thread.join()
         TMSiLoggerActivity().log("{}->>Sampling Thread: stop".format(self.get_name()))
         self._conversion_thread.stop()
         self._conversion_thread.join()
         TMSiLoggerActivity().log("{}->>Conversion Thread: stop".format(self.get_name()))
-        TMSiLoggerActivity().log("{}->>SAGA-SDK: set device download request OFF".format(self.get_name()))
-        self._dev.set_device_download_file_request(file_id = self._file_id, download = False)
+        TMSiLoggerActivity().log(
+            "{}->>SAGA-SDK: set device download request OFF".format(self.get_name())
+        )
+        self._dev.set_device_download_file_request(
+            file_id=self._file_id, download=False
+        )

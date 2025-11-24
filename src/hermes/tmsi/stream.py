@@ -1,6 +1,6 @@
 ############
 #
-# Copyright (c) 2024 Maxim Yudayev and KU Leuven eMedia Lab
+# Copyright (c) 2024-2025 Maxim Yudayev and KU Leuven eMedia Lab
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,55 +29,70 @@ from hermes.base.stream import Stream
 
 
 class TmsiStream(Stream):
-  """A structure to store TMSi SAGA stream's data.
-  """
-  def __init__(self, 
-               sampling_rate_hz: int = 20,
-               transmission_delay_period_s: int | None = None,
-               **_) -> None:
-    super().__init__()
-    self._sampling_rate_hz = sampling_rate_hz
-    self._transmission_delay_period_s = transmission_delay_period_s
+    """A structure to store TMSi SAGA stream's data."""
 
-    self.add_stream(device_name='tmsi-data',
-                    stream_name='breath',
-                    data_type='float32',
-                    sample_size=[1],
-                    sampling_rate_hz=self._sampling_rate_hz)
-    self.add_stream(device_name='tmsi-data',
-                    stream_name='GSR',
-                    data_type='float32',
-                    sample_size=[1],
-                    sampling_rate_hz=self._sampling_rate_hz)
-    self.add_stream(device_name='tmsi-data',
-                    stream_name='SPO2',
-                    data_type='float32',
-                    sample_size=[1],
-                    sampling_rate_hz=self._sampling_rate_hz)
-    self.add_stream(device_name='tmsi-data',
-                    stream_name='BIP-01',
-                    data_type='float32',
-                    sample_size=[1],
-                    sampling_rate_hz=self._sampling_rate_hz)
-    self.add_stream(device_name='tmsi-data',
-                    stream_name='BIP-02',
-                    data_type='float32',
-                    sample_size=[1],
-                    sampling_rate_hz=self._sampling_rate_hz)
-    self.add_stream(device_name='tmsi-data',
-                    stream_name='counter',
-                    data_type='int32',
-                    sample_size=[1],
-                    sampling_rate_hz=self._sampling_rate_hz,
-                    is_measure_rate_hz=True)
+    def __init__(
+        self,
+        sampling_rate_hz: int = 20,
+        transmission_delay_period_s: int | None = None,
+        **_
+    ) -> None:
+        super().__init__()
+        self._sampling_rate_hz = sampling_rate_hz
+        self._transmission_delay_period_s = transmission_delay_period_s
 
-    if self._transmission_delay_period_s:
-      self.add_stream(device_name='tmsi-connection',
-                      stream_name='transmission_delay',
-                      data_type='float32',
-                      sample_size=(1,),
-                      sampling_rate_hz=1.0/self._transmission_delay_period_s)
+        self.add_stream(
+            device_name="tmsi-data",
+            stream_name="breath",
+            data_type="float32",
+            sample_size=[1],
+            sampling_rate_hz=self._sampling_rate_hz,
+        )
+        self.add_stream(
+            device_name="tmsi-data",
+            stream_name="GSR",
+            data_type="float32",
+            sample_size=[1],
+            sampling_rate_hz=self._sampling_rate_hz,
+        )
+        self.add_stream(
+            device_name="tmsi-data",
+            stream_name="SPO2",
+            data_type="float32",
+            sample_size=[1],
+            sampling_rate_hz=self._sampling_rate_hz,
+        )
+        self.add_stream(
+            device_name="tmsi-data",
+            stream_name="BIP-01",
+            data_type="float32",
+            sample_size=[1],
+            sampling_rate_hz=self._sampling_rate_hz,
+        )
+        self.add_stream(
+            device_name="tmsi-data",
+            stream_name="BIP-02",
+            data_type="float32",
+            sample_size=[1],
+            sampling_rate_hz=self._sampling_rate_hz,
+        )
+        self.add_stream(
+            device_name="tmsi-data",
+            stream_name="counter",
+            data_type="int32",
+            sample_size=[1],
+            sampling_rate_hz=self._sampling_rate_hz,
+            is_measure_rate_hz=True,
+        )
 
+        if self._transmission_delay_period_s:
+            self.add_stream(
+                device_name="tmsi-connection",
+                stream_name="transmission_delay",
+                data_type="float32",
+                sample_size=(1,),
+                sampling_rate_hz=1.0 / self._transmission_delay_period_s,
+            )
 
-  def get_fps(self) -> dict[str, float | None]:
-    return {'tmsi-data': super()._get_fps('tmsi-data', 'counter')}
+    def get_fps(self) -> dict[str, float | None]:
+        return {"tmsi-data": super()._get_fps("tmsi-data", "counter")}

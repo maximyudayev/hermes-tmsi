@@ -5,15 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Local TMSi",
+      "name": "Local Tmsi",
       "type": "debugpy",
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "program": "examples/main.py",
       "args": [
-        "--experiment", "project=Test", "type=TMSi", "trial=0",
+        "--experiment", "project=Test", "type=Tmsi", "trial=0",
         "--config_file", "examples/tmsi.yml",
-        "--out_dir", "examples/"
+        "--out_dir", "examples/data"
       ],
       "env": {
         "PYTHONPATH": "${workspaceFolder}"

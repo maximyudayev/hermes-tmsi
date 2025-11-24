@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file saga_API.py 
- * @brief 
+ * @file saga_API.py
+ * @brief
  * API calls to communication library.
  */
 
 
-'''
+"""
 
 from ctypes import *
 from sys import platform
@@ -48,20 +48,22 @@ SagaDllLocked = True
 if platform == "linux" or platform == "linux2":
 
     so_name = "libTMSiSagaDeviceLib.so"
-    soabspath = os.path.sep + os.path.join('usr', 'lib', so_name)
-    dlclose_func = cdll.LoadLibrary('').dlclose
+    soabspath = os.path.sep + os.path.join("usr", "lib", so_name)
+    dlclose_func = cdll.LoadLibrary("").dlclose
     dlclose_func.argtypes = [c_void_p]
 
     try:
-        CDLL("librt.so.1",  RTLD_GLOBAL)
-        SagaSDK = CDLL(soabspath,  RTLD_GLOBAL)
+        CDLL("librt.so.1", RTLD_GLOBAL)
+        SagaSDK = CDLL(soabspath, RTLD_GLOBAL)
         sdk_handle = SagaSDK._handle
-        TMSiLogger().debug("Successfully loaded SAGA device library, handle: " + hex(sdk_handle) )
+        TMSiLogger().debug(
+            "Successfully loaded SAGA device library, handle: " + hex(sdk_handle)
+        )
         SagaDllAvailable = True
         SagaDllLocked = False
     except Exception as e:
         TMSiLogger().warning(e)
-elif platform == "win32": # Windows
+elif platform == "win32":  # Windows
     search_path = "C:/Program files/TMSi/Saga"
     name = "TMSiSagaDeviceLib.dll"
     result = os.path.join(search_path, name)
@@ -73,7 +75,9 @@ elif platform == "win32": # Windows
         SagaSDK = CDLL(so_name)
         SagaDllLocked = False
         sdk_handle = SagaSDK._handle
-        TMSiLogger().debug("Successfully loaded SAGA device library, handle: " + hex(sdk_handle) )
+        TMSiLogger().debug(
+            "Successfully loaded SAGA device library, handle: " + hex(sdk_handle)
+        )
     except Exception as e:
         if SagaDllAvailable:
             TMSiLogger().warning("{} already in use.".format(so_name))
@@ -84,7 +88,7 @@ else:
 if SagaDllAvailable and not SagaDllLocked:
     # DLL interface
 
-    #---
+    # ---
     # @details This command is used to retrieve a list of available TMSi devices
     # connected to the PC. This query is performed on the "DSInterfaceType" specified
     # by the user. All other interface types are ignored. For each device found on
@@ -107,12 +111,12 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiGetDeviceList = SagaSDK.TMSiGetDeviceList
     TMSiGetDeviceList.restype = TMSiDeviceRetVal
     TMSiGetDeviceList.argtype = [POINTER(TMSiDevList), c_int, c_uint, c_uint]
 
-    #---
+    # ---
     # @details This command is used to open a device. This will create a connection
     # between API and DS and "lock" the interface between DR and DS.
     #
@@ -131,13 +135,12 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiOpenDevice = SagaSDK.TMSiOpenDevice
     TMSiOpenDevice.restype = TMSiDeviceRetVal
     TMSiOpenDevice.argtype = [POINTER(c_void_p), c_uint, c_uint]
 
-
-    #---
+    # ---
     # @details This command is used to Close a device.
     #
     # @Pre \ref TMSiOpenDevice should have been called and returned a valid
@@ -153,13 +156,12 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiCloseDevice = SagaSDK.TMSiCloseDevice
     TMSiCloseDevice.restype = TMSiDeviceRetVal
     TMSiCloseDevice.argtype = [c_void_p]
 
-
-    #---
+    # ---
     # @details This command is used to retrieve a status report from a TMSi device.
     #
     # @Pre \ref TMSiOpenDevice should have been called and returned a valid
@@ -175,12 +177,12 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiGetDeviceStatus = SagaSDK.TMSiGetDeviceStatus
     TMSiGetDeviceStatus.restype = TMSiDeviceRetVal
     TMSiGetDeviceStatus.argtype = [c_void_p, POINTER(TMSiDevStatReport)]
 
-    #---
+    # ---
     # @details This command is used to retrieve a full status report from a TMSi
     # device.
     #
@@ -202,13 +204,20 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetFullDeviceStatus(void* TMSiDeviceHandle, TMSiDevFullStatReportType* FullDeviceStatus, TMSiDevBatReportType* DeviceBatteryStatusList, int32_t BatteryStatusListLen, TMSiTimeType* DeviceTime, TMSiDevStorageReportType* StorageReport);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetFullDeviceStatus(void* TMSiDeviceHandle, TMSiDevFullStatReportType* FullDeviceStatus, TMSiDevBatReportType* DeviceBatteryStatusList, int32_t BatteryStatusListLen, TMSiTimeType* DeviceTime, TMSiDevStorageReportType* StorageReport);
     TMSiGetFullDeviceStatus = SagaSDK.TMSiGetFullDeviceStatus
     TMSiGetFullDeviceStatus.restype = TMSiDeviceRetVal
-    TMSiGetFullDeviceStatus.argtype = [c_void_p, POINTER(TMSiDevFullStatReport), POINTER(TMSiDevBatReport), c_int, POINTER(TMSiTime), POINTER(TMSiDevStorageReport)]
+    TMSiGetFullDeviceStatus.argtype = [
+        c_void_p,
+        POINTER(TMSiDevFullStatReport),
+        POINTER(TMSiDevBatReport),
+        c_int,
+        POINTER(TMSiTime),
+        POINTER(TMSiDevStorageReport),
+    ]
 
-    #---
+    # ---
     # @details This command is used to retrieve the current configuration from a
     # TMSi device. The response can be used to calculate the expected data streams
     # from the device. If a channel is enabled for sampling the "ChanDivider > -1".
@@ -235,12 +244,17 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiGetDeviceConfig = SagaSDK.TMSiGetDeviceConfig
     TMSiGetDeviceConfig.restype = TMSiDeviceRetVal
-    TMSiGetDeviceConfig.argtype = [c_void_p, POINTER(TMSiDevGetConfig), POINTER(TMSiDevChDesc), c_int]
+    TMSiGetDeviceConfig.argtype = [
+        c_void_p,
+        POINTER(TMSiDevGetConfig),
+        POINTER(TMSiDevChDesc),
+        c_int,
+    ]
 
-    #---
+    # ---
     # @details This command is used to set a new configuration on a TMSi
     # device.
     #
@@ -261,13 +275,18 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceConfig(void* TMSiDeviceHandle, TMSiDevSetConfigType* RecorderConfiguration, TMSiDevSetChCfgType* ChannelConfigList, int32_t ChannelConfigListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceConfig(void* TMSiDeviceHandle, TMSiDevSetConfigType* RecorderConfiguration, TMSiDevSetChCfgType* ChannelConfigList, int32_t ChannelConfigListLen);
     TMSiSetDeviceConfig = SagaSDK.TMSiSetDeviceConfig
     TMSiSetDeviceConfig.restype = TMSiDeviceRetVal
-    TMSiSetDeviceConfig.argtype = [c_void_p, POINTER(TMSiDevSetConfig), POINTER(TMSiDevSetChCfg), c_int]
+    TMSiSetDeviceConfig.argtype = [
+        c_void_p,
+        POINTER(TMSiDevSetConfig),
+        POINTER(TMSiDevSetChCfg),
+        c_int,
+    ]
 
-    #---
+    # ---
     # @details This command is used to set the time on a TMSi device.
     #
     # @Pre \ref TMSiOpenDevice should have been called and returned a valid
@@ -284,13 +303,13 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceRTC(void* TMSiDeviceHandle, TMSiTimeType* NewTime);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceRTC(void* TMSiDeviceHandle, TMSiTimeType* NewTime);
     TMSiSetDeviceRTC = SagaSDK.TMSiSetDeviceRTC
     TMSiSetDeviceRTC.restype = TMSiDeviceRetVal
     TMSiSetDeviceRTC.argtype = [c_void_p, POINTER(TMSiTime)]
 
-    #---
+    # ---
     # @details This command is used to get sensor information from channels which
     # support this feature.
     #
@@ -312,13 +331,18 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceSensor(void* TMSiDeviceHandle, TMSiDevGetSensType* SensorsList, uint32_t SensorsListLen, uint32_t* RetSensorsListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceSensor(void* TMSiDeviceHandle, TMSiDevGetSensType* SensorsList, uint32_t SensorsListLen, uint32_t* RetSensorsListLen);
     TMSiGetDeviceSensor = SagaSDK.TMSiGetDeviceSensor
     TMSiGetDeviceSensor.restype = TMSiDeviceRetVal
-    TMSiGetDeviceSensor.argtype = [c_void_p, POINTER(TMSiDevGetSens), c_uint, POINTER(c_uint)]
+    TMSiGetDeviceSensor.argtype = [
+        c_void_p,
+        POINTER(TMSiDevGetSens),
+        c_uint,
+        POINTER(c_uint),
+    ]
 
-    #---
+    # ---
     # @details This command is used to set sensor options for channels which
     # support this feature.
     #
@@ -338,10 +362,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceSensor(void* TMSiDeviceHandle, TMSiSetDevSensType* SensorList, int32_t SensorsListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceSensor(void* TMSiDeviceHandle, TMSiSetDevSensType* SensorList, int32_t SensorsListLen);
 
-    #---
+    # ---
     # @details This command is used to control the sampling mode on a TMSi
     # device.
     #
@@ -363,12 +387,12 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiSetDeviceSampling = SagaSDK.TMSiSetDeviceSampling
     TMSiSetDeviceSampling.restype = TMSiDeviceRetVal
     TMSiSetDeviceSampling.argtype = [c_void_p, POINTER(TMSiDevSampleReq)]
 
-    #---
+    # ---
     # @details This command is used to set the device impedance mode.
     #
     # @Pre \ref TMSiOpenDevice should have been called and returned a valid
@@ -387,13 +411,13 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceImpedance(void* TMSiDeviceHandle, TMSiDevImpReqType* DeviceImpedanceMode);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceImpedance(void* TMSiDeviceHandle, TMSiDevImpReqType* DeviceImpedanceMode);
     TMSiSetDeviceImpedance = SagaSDK.TMSiSetDeviceImpedance
     TMSiSetDeviceImpedance.restype = TMSiDeviceRetVal
     TMSiSetDeviceImpedance.argtype = [c_void_p, POINTER(TMSiDevImpReq)]
 
-    #---
+    # ---
     # @details This command is used to get the device streaming data. The
     # application can retrieve sampledata/impdata from the device. It returns data
     # as 32-bit float values, all data is already processed, meaning it is converted
@@ -424,12 +448,18 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
     TMSiGetDeviceData = SagaSDK.TMSiGetDeviceData
     TMSiGetDeviceData.restype = TMSiDeviceRetVal
-    TMSiGetDeviceData.argtype = [c_void_p, POINTER(c_float), c_uint, POINTER(c_uint), POINTER(c_int)]
+    TMSiGetDeviceData.argtype = [
+        c_void_p,
+        POINTER(c_float),
+        c_uint,
+        POINTER(c_uint),
+        POINTER(c_int),
+    ]
 
-    #---
+    # ---
     # @details This command is used to get the current status of the streaming
     # databuffer. It returns the current value of the amount of data waiting in the
     # buffer.
@@ -448,10 +478,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceDataBuffered(void* TMSiDeviceHandle, int32_t* DeviceDataBuffered);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceDataBuffered(void* TMSiDeviceHandle, int32_t* DeviceDataBuffered);
 
-    #---
+    # ---
     # @details This command is used to reset the internal data buffer thread for the
     # specified device after it has been stopped sampling.
     #
@@ -468,12 +498,12 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DLL error received.
-    #---
+    # ---
     TMSiResetDeviceDataBuffer = SagaSDK.TMSiResetDeviceDataBuffer
     TMSiResetDeviceDataBuffer.restype = TMSiDeviceRetVal
     TMSiResetDeviceDataBuffer.argtype = [c_void_p]
 
-    #---
+    # ---
     # @details This command is used to get the device storage list.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -492,13 +522,18 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
+    # ---
 
     TMSiGetDeviceStorageList = SagaSDK.TMSiGetDeviceStorageList
     TMSiGetDeviceStorageList.restype = TMSiDeviceRetVal
-    TMSiGetDeviceStorageList.argtype = [c_void_p, POINTER(TMSiDevRecList), c_uint, POINTER(c_uint)]
+    TMSiGetDeviceStorageList.argtype = [
+        c_void_p,
+        POINTER(TMSiDevRecList),
+        c_uint,
+        POINTER(c_uint),
+    ]
 
-    #---
+    # ---
     # @details This command is used to get a recorded file from the data recorder
     # device. The file is selected by using the "RecFileID" as returned by
     # "TMSiGetDeviceStorageList". After a successful return from this call the file
@@ -528,14 +563,21 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetRecordingFile(void* TMSiDeviceHandle, uint16_t RecFileID, uint16_t StartStop, TMSiDevRecDetailsType* RecordingMetaData, TMSiDevImpReportType* ImpedanceReportList, int32_t ImpedanceReportListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetRecordingFile(void* TMSiDeviceHandle, uint16_t RecFileID, uint16_t StartStop, TMSiDevRecDetailsType* RecordingMetaData, TMSiDevImpReportType* ImpedanceReportList, int32_t ImpedanceReportListLen);
 
     TMSiGetRecordingFile = SagaSDK.TMSiGetRecordingFile
     TMSiGetRecordingFile.restype = TMSiDeviceRetVal
-    TMSiGetRecordingFile.argtype = [c_void_p, c_ushort, c_ushort, POINTER(TMSiDevRecDetails), POINTER(TMSiDevImpReport), c_uint]
+    TMSiGetRecordingFile.argtype = [
+        c_void_p,
+        c_ushort,
+        c_ushort,
+        POINTER(TMSiDevRecDetails),
+        POINTER(TMSiDevImpReport),
+        c_uint,
+    ]
 
-    #---
+    # ---
     # @details This command is used to get a ambulant recording configuration from
     # the data recorder device.
     #
@@ -553,16 +595,16 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceAmbConfig(void* TMSiDeviceHandle, TMSiDevRecCfgType* AmbulantConfiguration);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceAmbConfig(void* TMSiDeviceHandle, TMSiDevRecCfgType* AmbulantConfiguration);
 
-    #---
+    # ---
 
     TMSiGetDeviceAmbConfig = SagaSDK.TMSiGetDeviceAmbConfig
     TMSiGetDeviceAmbConfig.restype = TMSiDeviceRetVal
     TMSiGetDeviceAmbConfig.argtype = [c_void_p, POINTER(TMSiDevRecCfg)]
 
-    #---
+    # ---
     # @details This command is used to set a new ambulant recording configuration
     # from the data recorder device.
     #
@@ -580,16 +622,16 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal  TMSiSetDeviceAmbConfig(void* TMSiDeviceHandle, TMSiDevRecCfgType* AmbulantConfiguration);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal  TMSiSetDeviceAmbConfig(void* TMSiDeviceHandle, TMSiDevRecCfgType* AmbulantConfiguration);
 
-    #---
+    # ---
 
     TMSiSetDeviceAmbConfig = SagaSDK.TMSiSetDeviceAmbConfig
     TMSiSetDeviceAmbConfig.restype = TMSiDeviceRetVal
     TMSiSetDeviceAmbConfig.argtype = [c_void_p, POINTER(TMSiDevRecCfg)]
 
-    #---
+    # ---
     # @details This command is used to get repair data from a device after a measurement.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -608,10 +650,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal  TMSiGetDeviceRepairData(void* TMSiDeviceHandle, float* RepairDataBuffer, int32_t RepairDataBufferSize, int32_t* NrOfSamples, TMSiDevRepairReqType* RepairInfo);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal  TMSiGetDeviceRepairData(void* TMSiDeviceHandle, float* RepairDataBuffer, int32_t RepairDataBufferSize, int32_t* NrOfSamples, TMSiDevRepairReqType* RepairInfo);
 
-    #---
+    # ---
     # @details This command is used to get calibration data from a device. All
     # available channels will be returned.
     #
@@ -630,10 +672,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceCalibration(void* TMSiDeviceHandle, TMSiDevChCalType* ChCalValuesList, int32_t ChCalValuesListLen, int32_t* RetChCalValuesListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceCalibration(void* TMSiDeviceHandle, TMSiDevChCalType* ChCalValuesList, int32_t ChCalValuesListLen, int32_t* RetChCalValuesListLen);
 
-    #---
+    # ---
     # @details This command is used to set calibration data for a device.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -652,10 +694,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceCalibration(void* TMSiDeviceHandle, TMSiDevChCalType* ChCalValuesList, int32_t ChCalValuesListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceCalibration(void* TMSiDeviceHandle, TMSiDevChCalType* ChCalValuesList, int32_t ChCalValuesListLen);
 
-    #---
+    # ---
     # @details This command is used to set calibration mode for a device.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -672,10 +714,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceCalibrationMode(void* TMSiDeviceHandle, int32_t SetCalibrationMode);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceCalibrationMode(void* TMSiDeviceHandle, int32_t SetCalibrationMode);
 
-    #---
+    # ---
     # @details This command is used to get the current logging activity and health state of the device.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -692,10 +734,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceDiagnostics(void* TMSiDeviceHandle, TMSiDevGetDiagStatType* DeviceDiagnostics);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceDiagnostics(void* TMSiDeviceHandle, TMSiDevGetDiagStatType* DeviceDiagnostics);
 
-    #---
+    # ---
     # @details This command is used to set the logging options for a device. When
     # logging is enabled without a logfile reset, the device will append to an
     # existing log file.
@@ -714,10 +756,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceDiagnostics(void* TMSiDeviceHandle, TMSiDevSetDiagStatType* DeviceDiagnosticsCfg);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceDiagnostics(void* TMSiDeviceHandle, TMSiDevSetDiagStatType* DeviceDiagnosticsCfg);
 
-    #---
+    # ---
     # @details This command is used to get the current logfile of a device.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -737,10 +779,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceLog(void* TMSiDeviceHandle, uint32_t TMSiDevice, uint32_t DeviceLogBufferSize, uint32_t* RetDeviceLogBufferSize, uint8_t* DeviceLogData);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceLog(void* TMSiDeviceHandle, uint32_t TMSiDevice, uint32_t DeviceLogBufferSize, uint32_t* RetDeviceLogBufferSize, uint8_t* DeviceLogData);
 
-    #---
+    # ---
     # @details This command is used to get the current firmware status of a device.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -758,10 +800,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceFWStatus(void* TMSiDeviceHandle, uint32_t TMSiDevice, TMSiDevFWStatusReportType* FWReport);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDeviceFWStatus(void* TMSiDeviceHandle, uint32_t TMSiDevice, TMSiDevFWStatusReportType* FWReport);
 
-    #---
+    # ---
     # @details This command is used to prepare a device for a firmware update. This
     # call sends the firmware header which is checked for compatibility.
     #
@@ -780,10 +822,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful, firmware header is accepted.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceFWUpdate(void* TMSiDeviceHandle, uint32_t TMSiDevice, TMSiFWHeaderFileType* NewFWHeader);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDeviceFWUpdate(void* TMSiDeviceHandle, uint32_t TMSiDevice, TMSiFWHeaderFileType* NewFWHeader);
 
-    #---
+    # ---
     # @details This command is used to send the firmware data to a device.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -802,10 +844,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiPushFWUpdate(void* TMSiDeviceHandle, uint32_t TMSiDevice, uint32_t FWDataSize, uint8_t* FWData);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiPushFWUpdate(void* TMSiDeviceHandle, uint32_t TMSiDevice, uint32_t FWDataSize, uint8_t* FWData);
 
-    #---
+    # ---
     # @details This command is used to initiate or abort a firmware update.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -823,10 +865,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiDoneFWUpdate(void* TMSiDeviceHandle, uint32_t TMSiDevice, int32_t FWAction);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiDoneFWUpdate(void* TMSiDeviceHandle, uint32_t TMSiDevice, int32_t FWAction);
 
-    #---
+    # ---
     # @details This command is used to program production information during
     # manufacturing.
     #
@@ -846,10 +888,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetProductConfig(void* TMSiDeviceHandle, TMSiDevProductConfigType* ProductConfig, TMSiDevProductChCfgType* ChannelConfigList, uint32_t ChannelConfigListLen);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetProductConfig(void* TMSiDeviceHandle, TMSiDevProductConfigType* ProductConfig, TMSiDevProductChCfgType* ChannelConfigList, uint32_t ChannelConfigListLen);
 
-    #---
+    # ---
     # @details This command is used to set the network configuration for the DS.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -866,10 +908,10 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDevNetworkConfig(void* TMSiDeviceHandle, TMSiDevNetworkConfigType* GetDSNetworkConig);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiGetDevNetworkConfig(void* TMSiDeviceHandle, TMSiDevNetworkConfigType* GetDSNetworkConig);
 
-    #---
+    # ---
     # @details This command is used to set the network configuration for the DS.
     #
     # @Pre @li \ref TMSiOpenDevice should have been called and returned a valid
@@ -886,9 +928,7 @@ if SagaDllAvailable and not SagaDllLocked:
     # @return
     # @li TMSI_OK Ok, if response received successful.
     # @li Any TMSI_DS*, TMSI_DR*, TMSI_DLL error received.
-    #---
-    #TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDevNetworkConfig(void* TMSiDeviceHandle, TMSiDevNetworkConfigType* SetDSNetworkConig);
+    # ---
+    # TMSIDEVICEDLL_API TMSiDeviceRetVal TMSiSetDevNetworkConfig(void* TMSiDeviceHandle, TMSiDevNetworkConfigType* SetDSNetworkConig);
 
-
-
-    #endif
+    # endif

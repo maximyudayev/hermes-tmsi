@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,22 +22,24 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_channel.py 
- * @brief 
+ * @file apex_channel.py
+ * @brief
  * APEX Channel object.
  */
 
 
-'''
+"""
 
 from ....tmsi_channel import TMSiChannel, ChannelType
 
+
 class ApexChannel(TMSiChannel):
     """A class to handle Apex channels."""
+
     def set_channel_information(self, channel_metadata):
         """Set the information of the channel.
 
-        :param channel_metadata: channel metadata information 
+        :param channel_metadata: channel metadata information
         :type channel_metadata: list[TMSiChannelMetadata]
         """
         self._type = ChannelType(channel_metadata.ChannelType)
@@ -46,4 +48,4 @@ class ApexChannel(TMSiChannel):
         self._enabled = self._chan_divider != -1
         self._imp_divider = channel_metadata.ImpDivider
         self._exp = channel_metadata.Exp
-        self._unit_name = channel_metadata.UnitName.decode('windows-1252')
+        self._unit_name = channel_metadata.UnitName.decode("windows-1252")

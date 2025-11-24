@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_info.py 
- * @brief 
+ * @file apex_info.py
+ * @brief
  * APEX Information object.
  */
 
 
-'''
+"""
 
 from ....tmsi_device_enums import *
 
@@ -36,15 +36,18 @@ from ..apex_API_enums import TMSiPairingStatus
 
 from .apex_const import ApexConst
 
-class ApexInfo():
-    """Class to handle the information of the Apex.
-    """
-    def __init__(self, 
-        dongle_serial_number = 0,
-        serial_number = 0,
-        id = ApexConst.TMSI_DEVICE_ID_NONE, 
-        dr_interface = DeviceInterfaceType.none,
-        pairing_status = PairingStatus.no_pairing_needed):
+
+class ApexInfo:
+    """Class to handle the information of the Apex."""
+
+    def __init__(
+        self,
+        dongle_serial_number=0,
+        serial_number=0,
+        id=ApexConst.TMSI_DEVICE_ID_NONE,
+        dr_interface=DeviceInterfaceType.none,
+        pairing_status=PairingStatus.no_pairing_needed,
+    ):
         """Initialize the information of Apex.
 
         :param dongle_serial_number: serial number of the dongle, defaults to 0
@@ -94,7 +97,7 @@ class ApexInfo():
         :rtype: str
         """
         return self.__device_name
-    
+
     def get_num_channels(self):
         """Get the number of channels.
 
@@ -153,8 +156,8 @@ class ApexInfo():
         self.__num_hw_channels = device_info_report.NrOfHWChannels
         self.__num_imp_channels = device_info_report.NrOfImpChannels
         self.__num_cycling_states = device_info_report.NrOfCyclingStates
-        self.__device_name = device_info_report.DeviceName.decode('windows-1252')
-        
+        self.__device_name = device_info_report.DeviceName.decode("windows-1252")
+
     def set_dongle_id(self, dongle_id):
         """Set the id of the dongle.
 

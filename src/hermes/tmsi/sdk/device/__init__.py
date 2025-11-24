@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,25 +22,25 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file __init__.py 
- * @brief 
+ * @file __init__.py
+ * @brief
  * Initialization of the device.
  */
 
 
-'''
+"""
 
 from .tmsi_device import TMSiDevice
 
-#from .devices.apex.apex_device import ApexDevice
+# from .devices.apex.apex_device import ApexDevice
 from .devices.saga.saga_device import SagaDevice
 
-#from .devices.apex import apex_API_enums as ApexEnums
-#from .devices.apex import apex_API_structures as ApexStructures
-#from .devices.apex.apex_structures.apex_channel import ApexChannel, ChannelType
-#from .devices.apex.apex_structures.apex_impedance_channel import ApexImpedanceChannel
+# from .devices.apex import apex_API_enums as ApexEnums
+# from .devices.apex import apex_API_structures as ApexStructures
+# from .devices.apex.apex_structures.apex_channel import ApexChannel, ChannelType
+# from .devices.apex.apex_structures.apex_impedance_channel import ApexImpedanceChannel
 
-#from ..tmsi_utilities.apex.apex_structure_generator import ApexStructureGenerator
+# from ..tmsi_utilities.apex.apex_structure_generator import ApexStructureGenerator
 from ..tmsi_utilities.saga.saga_structure_generator import SagaStructureGenerator
 
 from .devices.saga import saga_API_enums as SagaEnums

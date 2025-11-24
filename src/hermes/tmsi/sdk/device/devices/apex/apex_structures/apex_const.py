@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,14 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_const.py 
- * @brief 
+ * @file apex_const.py
+ * @brief
  * APEX Constants.
  */
 
 
-'''
+"""
+
 
 class ApexConst:
     TMSI_DEVICE_ID_NONE = 0xFFFF

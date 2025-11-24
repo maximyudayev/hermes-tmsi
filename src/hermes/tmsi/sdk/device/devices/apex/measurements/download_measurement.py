@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file download_measurement.py 
- * @brief 
+ * @file download_measurement.py
+ * @brief
  * Class to handle the download of a file from the device.
  */
 
 
-'''
+"""
 
 from .....tmsi_utilities.decorators import LogPerformances
 from .....tmsi_utilities.tmsi_logger import TMSiLoggerActivity
@@ -39,7 +39,14 @@ from .signal_measurement import SignalMeasurement
 
 class DownloadMeasurement(SignalMeasurement):
     """Class to handle the download measurements."""
-    def __init__(self, dev, file_id: int, n_of_samples: int = None, name:str = "Download Measurement"):
+
+    def __init__(
+        self,
+        dev,
+        file_id: int,
+        n_of_samples: int = None,
+        name: str = "Download Measurement",
+    ):
         """Initialize the download measurement.
 
         :param dev: Device to download from.
@@ -62,25 +69,27 @@ class DownloadMeasurement(SignalMeasurement):
 
     @LogPerformances
     def start(self):
-        """Start the measurement.
-        """
+        """Start the measurement."""
         self._dev.reset_device_data_buffer()
         file_request = TMSiDevSetCardFileReq()
         file_request.RecFileID = self._file_id
         file_request.StartCounter = 0
         file_request.NumberOfSamples = self._n_of_samples
         file_request.StartStop = SampleControl.StartSampling.value
-        TMSiLoggerActivity().log("{}->>APEX-SDK: set device download request ON".format(self.get_name()))
+        TMSiLoggerActivity().log(
+            "{}->>APEX-SDK: set device download request ON".format(self.get_name())
+        )
         self._dev.set_device_download_file_request(file_request)
         TMSiLoggerActivity().log("{}->>Sampling Thread: start".format(self.get_name()))
         self._sampling_thread.start()
-        TMSiLoggerActivity().log("{}->>Conversion Thread: start".format(self.get_name()))
+        TMSiLoggerActivity().log(
+            "{}->>Conversion Thread: start".format(self.get_name())
+        )
         self._conversion_thread.start()
 
     @LogPerformances
     def stop(self):
-        """Stop the measurement.
-        """
+        """Stop the measurement."""
         file_request = TMSiDevSetCardFileReq()
         file_request.RecFileID = self._file_id
         file_request.StartStop = SampleControl.StopSampling.value
@@ -90,5 +99,7 @@ class DownloadMeasurement(SignalMeasurement):
         self._conversion_thread.stop()
         self._conversion_thread.join()
         TMSiLoggerActivity().log("{}->>Conversion Thread: stop".format(self.get_name()))
-        TMSiLoggerActivity().log("{}->>APEX-SDK: set device download request OFF".format(self.get_name()))
+        TMSiLoggerActivity().log(
+            "{}->>APEX-SDK: set device download request OFF".format(self.get_name())
+        )
         self._dev.set_device_download_file_request(file_request)

@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,15 +22,18 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file mask_type.py 
- * @brief 
+ * @file mask_type.py
+ * @brief
  * Class to handle mask types
  */
 
 
-'''
+"""
 
-trigger_bits = 0b00000000000000000000000011111111 #bits which contain actual trigger data
+trigger_bits = (
+    0b00000000000000000000000011111111  # bits which contain actual trigger data
+)
+
 
 def robust_reverse(x):
     """Robust function to revert a list or a tuple given as input
@@ -40,8 +43,7 @@ def robust_reverse(x):
     :return: list or tuple reverted. if the wrong datatype is provided, the original input is returned.
     :rtype: list or tuple
     """
-    
-    
+
     try:
         if isinstance(x, list):
             return [(~int(i) & trigger_bits) for i in x]
@@ -51,9 +53,11 @@ def robust_reverse(x):
     except:
         return x
 
-class MaskType():
+
+class MaskType:
     """
     This class contains all the allowed masks.
     """
+
     DEFAULT = lambda x: x
     REVERSE = robust_reverse

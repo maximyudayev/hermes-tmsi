@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,22 +22,35 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file tmsi_device_enums.py 
- * @brief 
+ * @file tmsi_device_enums.py
+ * @brief
  * Enumerable classes useful for the use of the SDK.
  */
 
 
-'''
+"""
 
 from enum import Enum, unique
 
-from .devices.apex.measurements.signal_measurement import SignalMeasurement as ApexSignalMeasurement
-from .devices.apex.measurements.impedance_measurement import ImpedanceMeasurement as ApexImpedanceMeasurement
-from .devices.apex.measurements.download_measurement import DownloadMeasurement as ApexDownloadMeasurement
-from .devices.saga.measurements.signal_measurement import SignalMeasurement as SagaSignalMeasurement
-from .devices.saga.measurements.impedance_measurement import ImpedanceMeasurement as SagaImpedanceMeasurement
-from .devices.saga.measurements.download_measurement import DownloadMeasurement as SagaDownloadMeasurement
+from .devices.apex.measurements.signal_measurement import (
+    SignalMeasurement as ApexSignalMeasurement,
+)
+from .devices.apex.measurements.impedance_measurement import (
+    ImpedanceMeasurement as ApexImpedanceMeasurement,
+)
+from .devices.apex.measurements.download_measurement import (
+    DownloadMeasurement as ApexDownloadMeasurement,
+)
+from .devices.saga.measurements.signal_measurement import (
+    SignalMeasurement as SagaSignalMeasurement,
+)
+from .devices.saga.measurements.impedance_measurement import (
+    ImpedanceMeasurement as SagaImpedanceMeasurement,
+)
+from .devices.saga.measurements.download_measurement import (
+    DownloadMeasurement as SagaDownloadMeasurement,
+)
+
 
 @unique
 class DeviceInterfaceType(Enum):
@@ -50,17 +63,20 @@ class DeviceInterfaceType(Enum):
     bluetooth = 6
     serial = 7
 
+
 @unique
 class DeviceState(Enum):
     disconnected = 0
     connected = 1
     sampling = 2
 
+
 @unique
 class PairingStatus(Enum):
     no_pairing_needed = 0
     paired = 1
-    not_paired = 2	
+    not_paired = 2
+
 
 @unique
 class ChannelType(Enum):
@@ -75,10 +91,12 @@ class ChannelType(Enum):
     cycling_status = 8
     all_types = 9
 
+
 @unique
 class ReferenceMethod(Enum):
     common = 0
     average = 1
+
 
 @unique
 class DeviceType(Enum):
@@ -86,12 +104,14 @@ class DeviceType(Enum):
     saga = 1
     apex = 2
 
+
 @unique
 class ReferenceSwitch(Enum):
-    fixed=0
-    auto=1
+    fixed = 0
+    auto = 1
 
-class MeasurementType():
+
+class MeasurementType:
     APEX_SIGNAL = ApexSignalMeasurement
     APEX_IMPEDANCE = ApexImpedanceMeasurement
     APEX_DOWNLOAD = ApexDownloadMeasurement

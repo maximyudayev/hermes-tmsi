@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file logger_filter.py 
- * @brief 
+ * @file logger_filter.py
+ * @brief
  * Filter to handle the logs.
  */
 
 
-'''
+"""
 
 PERFORMANCE_LOG = 25
 ACTIVITY_LOG = 26
@@ -44,6 +44,7 @@ class LoggerFilter(object):
         :type level: int
         """
         self.__level = level
+
     def filter(self, log_record):
         """Filter the log.
 

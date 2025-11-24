@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,18 +22,18 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file saga_sensor.py 
- * @brief 
+ * @file saga_sensor.py
+ * @brief
  * SAGA Sensor object.
  */
 
 
-'''
+"""
+
 
 class SagaSensor:
     def __init__(self):
-        """Initialize Saga Sensor
-        """
+        """Initialize Saga Sensor"""
         self.__idx_total_channel_list = -1
         self.__id = -1
         self.__manufacturer_id = 0
@@ -52,7 +52,7 @@ class SagaSensor:
         :rtype: str
         """
         return self.__name
-    
+
     def get_sensor_exp(self):
         """Get sensor exp
 
@@ -60,7 +60,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__exp
-    
+
     def get_sensor_unit_name(self):
         """Get sensor unit_name
 
@@ -68,7 +68,7 @@ class SagaSensor:
         :rtype: str
         """
         return self.__unit_name
-    
+
     def get_sensor_gain(self):
         """Get sensor gain
 
@@ -76,7 +76,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__gain
-    
+
     def get_sensor_idx_total_channel_list(self):
         """Get sensor idx_total_channel_list
 
@@ -84,7 +84,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__idx_total_channel_list
-    
+
     def get_sensor_id(self):
         """Get sensor id
 
@@ -92,7 +92,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__id
-    
+
     def get_sensor_IOMode(self):
         """Get sensor IOMode
 
@@ -100,7 +100,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__IOMode
-    
+
     def get_sensor_manufacturer_id(self):
         """Get sensor manufacturer_id
 
@@ -108,7 +108,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__manufacturer_id
-    
+
     def get_sensor_serial_nr(self):
         """Get sensor serial_nr
 
@@ -116,7 +116,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__serial_nr
-    
+
     def get_sensor_product_id(self):
         """Get sensor product_id
 
@@ -124,7 +124,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__product_id
-    
+
     def get_sensor_offset(self):
         """Get sensor offset
 
@@ -132,7 +132,7 @@ class SagaSensor:
         :rtype: float
         """
         return self.__offset
-    
+
     def set_sensor_name(self, name):
         """Set sensor name
 
@@ -140,13 +140,13 @@ class SagaSensor:
         :type name: str
         """
         new_name = bytearray()
-        for i in range (len(name)):
+        for i in range(len(name)):
             if name[i] > 127:
-                new_name.append(194) #0xC2
+                new_name.append(194)  # 0xC2
             new_name.append(name[i])
         if len(new_name) > 0:
-            self.__name = new_name.decode('utf8').rstrip('\x00')
-    
+            self.__name = new_name.decode("utf8").rstrip("\x00")
+
     def set_sensor_exp(self, exp):
         """Set sensor exp
 
@@ -154,7 +154,7 @@ class SagaSensor:
         :type exp: float
         """
         self.__exp = exp
-    
+
     def set_sensor_unit_name(self, unit_name):
         """Set sensor unit name
 
@@ -162,13 +162,13 @@ class SagaSensor:
         :type unit_name: str
         """
         new_name = bytearray()
-        for i in range (len(unit_name)):
+        for i in range(len(unit_name)):
             if unit_name[i] > 127:
-                new_name.append(194) #0xC2
+                new_name.append(194)  # 0xC2
             new_name.append(unit_name[i])
         if len(new_name) > 0:
-            self.__unit_name = new_name.decode('utf8').rstrip('\x00')
-    
+            self.__unit_name = new_name.decode("utf8").rstrip("\x00")
+
     def set_sensor_gain(self, gain):
         """Set sensor gain
 
@@ -176,7 +176,7 @@ class SagaSensor:
         :type gain: float
         """
         self.__gain = gain
-    
+
     def set_sensor_idx_total_channel_list(self, idx_total_channel_list):
         """Set sensor idx_total_channel_list
 
@@ -184,7 +184,7 @@ class SagaSensor:
         :type idx_total_channel_list: float
         """
         self.__idx_total_channel_list = idx_total_channel_list
-    
+
     def set_sensor_id(self, id):
         """Set sensor id
 
@@ -192,7 +192,7 @@ class SagaSensor:
         :type id: float
         """
         self.__id = id
-    
+
     def set_sensor_IOMode(self, IOMode):
         """Set sensor IOMode
 
@@ -200,7 +200,7 @@ class SagaSensor:
         :type IOMode: float
         """
         self.__IOMode = IOMode
-    
+
     def set_sensor_manufacturer_id(self, manufacturer_id):
         """Set sensor manufacturer_id
 
@@ -208,7 +208,7 @@ class SagaSensor:
         :type manufacturer_id: float
         """
         self.__manufacturer_id = manufacturer_id
-    
+
     def set_sensor_serial_nr(self, serial_nr):
         """Set sensor serial_nr
 
@@ -216,7 +216,7 @@ class SagaSensor:
         :type serial_nr: float
         """
         self.__serial_nr = serial_nr
-    
+
     def set_sensor_product_id(self, product_id):
         """Set sensor product_id
 
@@ -224,7 +224,7 @@ class SagaSensor:
         :type product_id: float
         """
         self.__product_id = product_id
-    
+
     def set_sensor_offset(self, offset):
         """Set sensor offset
 
@@ -232,4 +232,3 @@ class SagaSensor:
         :type offset: float
         """
         self.__offset = offset
-    

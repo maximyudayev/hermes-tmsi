@@ -1,2 +1,2 @@
 #!/bin/sh
-hermes-cli -o ./ --config_file tmsi.yml --experiment project=Test type=TMSi trial=0
+hermes-cli -o ./data --config_file tmsi.yml --experiment project=Test type=Tmsi trial=0

@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,28 +22,31 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file saga_info.py 
- * @brief 
+ * @file saga_info.py
+ * @brief
  * SAGA Information object.
  */
 
 
-'''
+"""
 
 from ....tmsi_device_enums import *
 
 from .saga_const import SagaConst
 
-class SagaInfo():
-    """Class to handle the information of the Saga.
-    """
-    def __init__(self, 
-        id = SagaConst.TMSI_DEVICE_ID_NONE, 
-        dr_serial_number = 0,
-        ds_serial_number = 0,
-        dr_interface = DeviceInterfaceType.none,
-        ds_interface = DeviceInterfaceType.none):
-        
+
+class SagaInfo:
+    """Class to handle the information of the Saga."""
+
+    def __init__(
+        self,
+        id=SagaConst.TMSI_DEVICE_ID_NONE,
+        dr_serial_number=0,
+        ds_serial_number=0,
+        dr_interface=DeviceInterfaceType.none,
+        ds_interface=DeviceInterfaceType.none,
+    ):
+
         self.__device_name = "Unknown"
         self.__ds_interface = ds_interface
         self.__ds_serial_number = ds_serial_number
@@ -115,7 +118,7 @@ class SagaInfo():
         :rtype: int
         """
         return self.__interface_bandwidth
-    
+
     def get_name(self):
         """Get the name of the Saga
 
@@ -123,7 +126,7 @@ class SagaInfo():
         :rtype: str
         """
         return self.__device_name
-    
+
     def get_num_active_channels(self):
         """Get the number of active channels.
 
@@ -131,7 +134,7 @@ class SagaInfo():
         :rtype: int
         """
         return self.__num_active_channels
-    
+
     def get_num_active_imp_channels(self):
         """Get the number of active impedance channels.
 
@@ -172,7 +175,7 @@ class SagaInfo():
         """
         self.__num_channels = device_status_report.NrOfChannels
         self.__num_batteries = device_status_report.NrOfBatteries
-                
+
     def set_device_config(self, device_config):
         """Set device configuration
 
@@ -184,7 +187,7 @@ class SagaInfo():
         self.__interface_bandwidth = device_config.InterFaceBandWidth * 1_000_000
         self.__available_recordings = device_config.AvailableRecordings
         self.__device_name = device_config.DeviceName.decode("windows-1252")
-    
+
     def set_dr_interface(self, dr_interface):
         """Set the dr interface of the dr.
 
@@ -225,7 +228,7 @@ class SagaInfo():
         """
         self.__id = id
 
-    def set_num_active_channels(self, num_active_channels:int):
+    def set_num_active_channels(self, num_active_channels: int):
         """Set the number of active channels
 
         :param num_active_channels: number of active channels
@@ -233,7 +236,7 @@ class SagaInfo():
         """
         self.__num_active_channels = num_active_channels
 
-    def set_num_active_imp_channels(self, num_active_imp_channels:int):
+    def set_num_active_imp_channels(self, num_active_imp_channels: int):
         """Set the number of active channels
 
         :param num_active_imp_channels: number of active impedance channels

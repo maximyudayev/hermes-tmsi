@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,16 +22,18 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file tmsi_dongle.py 
- * @brief 
+ * @file tmsi_dongle.py
+ * @brief
  * TMSi Dongle interface.
  */
 
 
-'''
+"""
+
 
 class TMSiDongle:
     """A class to handle all the TMSi dongles."""
+
     def __init__(self, dongle_id, serial_number):
         """Initialize the dongle.
 

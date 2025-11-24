@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file saga_structure_generator.py 
- * @brief 
+ * @file saga_structure_generator.py
+ * @brief
  * Object that creates the structures needed to communicate with Saga.
  */
 
 
-'''
+"""
 
 import datetime
 
@@ -39,17 +39,18 @@ from ...device.devices.saga.saga_device import SagaDevice
 
 class SagaStructureGenerator:
     """Class to handle the generation of structures useful for the SagaDevice"""
+
     def create_card_record_configuration(
         device: SagaDevice,
         start_control: SagaEnums.SagaStartCardRecording = None,
         prefix_file_name: str = None,
         start_time: datetime.datetime = None,
         stop_time: datetime.datetime = None,
-        pre_measurement_imp = None,
-        pre_measeurement_imp_seconds = None,
+        pre_measurement_imp=None,
+        pre_measeurement_imp_seconds=None,
         user_string_1: str = None,
         user_string_2: str = None,
-        patient_id: str = None
+        patient_id: str = None,
     ) -> SagaStructures.TMSiDevRecCfg:
         """Creates the TMSiDevRecCfg structure with provided parameters
 
@@ -72,46 +73,45 @@ class SagaStructureGenerator:
         :return: the structure containing provided information
         :rtype: SagaStructures.TMSiDevRecCfg
         """
-        
+
         config = device.get_card_recording_config()
         if start_control is not None:
             config.StartControl = start_control.value
         if prefix_file_name is not None:
             max_len = len(prefix_file_name)
-            prefix_file_name = bytearray(prefix_file_name, 'utf-8')
+            prefix_file_name = bytearray(prefix_file_name, "utf-8")
             converted_str = bytearray(SagaEnums.SagaStringLengths.PrefixFileName.value)
             converted_str[:max_len] = prefix_file_name[:max_len]
             config.PrefixFileName[:] = converted_str
         if user_string_1 is not None:
             max_len = len(user_string_1)
-            user_string_1 = bytearray(user_string_1, 'utf-8')
+            user_string_1 = bytearray(user_string_1, "utf-8")
             converted_str = bytearray(SagaEnums.SagaStringLengths.UserString.value)
             converted_str[:max_len] = user_string_1[:max_len]
             config.UserString1[:] = converted_str
         if user_string_2 is not None:
             max_len = len(user_string_2)
-            user_string_2 = bytearray(user_string_2, 'utf-8')
+            user_string_2 = bytearray(user_string_2, "utf-8")
             converted_str = bytearray(SagaEnums.SagaStringLengths.UserString.value)
             converted_str[:max_len] = user_string_2[:max_len]
             config.UserString2[:] = converted_str
         if patient_id is not None:
             max_len = len(patient_id)
-            patient_id = bytearray(patient_id, 'utf-8')
+            patient_id = bytearray(patient_id, "utf-8")
             converted_str = bytearray(SagaEnums.SagaStringLengths.PatientString.value)
             converted_str[:max_len] = patient_id[:max_len]
             config.PatientID[:] = converted_str
         if start_time is not None:
             SagaStructureGenerator.from_datetime_to_tmsitime(
-                start_time, config.StartTime)
+                start_time, config.StartTime
+            )
         if stop_time is not None:
-            SagaStructureGenerator.from_datetime_to_tmsitime(
-                stop_time, config.StopTime)
+            SagaStructureGenerator.from_datetime_to_tmsitime(stop_time, config.StopTime)
         if pre_measurement_imp is not None:
             config.PreImp = pre_measurement_imp
         if pre_measeurement_imp_seconds is not None:
             config.PreImpSec = pre_measeurement_imp_seconds
         return config
-
 
     def from_qdatetime_to_tmsitime(qdatetime, tmsi_time):
         """Convert QDateTime to TMSiTime.
@@ -128,7 +128,7 @@ class SagaStructureGenerator:
         tmsi_time.Hours = qdatetime.time().hour()
         tmsi_time.DayOfMonth = qdatetime.date().day()
         tmsi_time.Month = qdatetime.date().month() - 1
-        tmsi_time.Year = qdatetime.date().year()-1900
+        tmsi_time.Year = qdatetime.date().year() - 1900
         return tmsi_time
 
     def from_datetime_to_tmsitime(date_time, tmsi_time):
@@ -146,10 +146,9 @@ class SagaStructureGenerator:
         tmsi_time.Hours = date_time.time().hour
         tmsi_time.DayOfMonth = date_time.date().day
         tmsi_time.Month = date_time.date().month - 1
-        tmsi_time.Year = date_time.date().year-1900
+        tmsi_time.Year = date_time.date().year - 1900
         return tmsi_time
 
-    
     def from_tmsitime_to_datetime(tmsi_time, date_time):
         """Convert TMSiTime to datetime.
 
@@ -166,7 +165,6 @@ class SagaStructureGenerator:
             tmsi_time.DayOfMonth,
             tmsi_time.Hours,
             tmsi_time.Minutes,
-            tmsi_time.Seconds)
+            tmsi_time.Seconds,
+        )
         return date_time
-
-    

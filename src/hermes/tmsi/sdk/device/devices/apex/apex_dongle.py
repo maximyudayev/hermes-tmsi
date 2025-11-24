@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,19 +22,21 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file apex_dongle.py 
- * @brief 
+ * @file apex_dongle.py
+ * @brief
  * APEX Dongle object.
  */
 
 
-'''
+"""
 
 from ...tmsi_dongle import TMSiDongle
 
+
 class ApexDongle(TMSiDongle):
     """A class to represent and handle the Apex Dongle"""
-    def __init__(self, dongle_id:int, serial_number:int):
+
+    def __init__(self, dongle_id: int, serial_number: int):
         """Initialize the dongle.
 
         :param dongle_id: id of the dongle.

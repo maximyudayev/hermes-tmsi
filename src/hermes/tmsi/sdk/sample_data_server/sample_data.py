@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,17 +22,18 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file sample_data.py 
- * @brief 
+ * @file sample_data.py
+ * @brief
  * Sample data structure.
  */
 
 
-'''
+"""
+
 
 class SampleSet:
-    """Class to handle sample sets.
-    """
+    """Class to handle sample sets."""
+
     def __init__(self, num_samples, samples):
         """Initialize sample set.
 
@@ -45,9 +46,10 @@ class SampleSet:
         self.num_samples = num_samples
         self.samples = samples
 
+
 class SampleData:
-    """Class to handle sample data.
-    """
+    """Class to handle sample data."""
+
     def __init__(self, num_sample_sets, num_samples_per_sample_set, samples):
         """Initialize the sample data.
 
@@ -62,9 +64,10 @@ class SampleData:
         self.num_samples_per_sample_set = num_samples_per_sample_set
         self.samples = samples
 
+
 class SampleDataConsumer:
-    """Class to handle the sample data consumers.
-    """
+    """Class to handle the sample data consumers."""
+
     def __init__(self, id, q):
         """Initialize the sample data consumer.
 

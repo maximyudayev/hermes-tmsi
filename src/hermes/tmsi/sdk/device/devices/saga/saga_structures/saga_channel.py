@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,18 +22,20 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file saga_channel.py 
- * @brief 
+ * @file saga_channel.py
+ * @brief
  * SAGA Channel object.
  */
 
 
-'''
+"""
 
 from ....tmsi_channel import TMSiChannel, ChannelType
 
+
 class SagaChannel(TMSiChannel):
     """A class to handle Saga channels."""
+
     def __init__(self):
         """Initialize Saga channel"""
         super().__init__()
@@ -50,7 +52,7 @@ class SagaChannel(TMSiChannel):
     def set_channel_information(self, channel_description):
         """Set the information of the channel.
 
-        :param channel_description: channel description 
+        :param channel_description: channel description
         :type channel_description: list[TMSiDevChDesc]
         """
         self._type = ChannelType(channel_description.ChannelType)
@@ -60,14 +62,14 @@ class SagaChannel(TMSiChannel):
         self._enabled = self._chan_divider != -1
         self._imp_divider = channel_description.ImpDivider
         self._exp = channel_description.Exp
-        self._unit_name = channel_description.UnitName.decode('windows-1252')
-        self._def_name = channel_description.DefChanName.decode('windows-1252')
+        self._unit_name = channel_description.UnitName.decode("windows-1252")
+        self._def_name = channel_description.DefChanName.decode("windows-1252")
         if self._type == ChannelType.AUX:
             self._alt_name = self._def_name
         else:
-            self._alt_name = channel_description.AltChanName.decode('windows-1252')
+            self._alt_name = channel_description.AltChanName.decode("windows-1252")
 
-    def set_sensor_information(self, sensor, bipolar = False):
+    def set_sensor_information(self, sensor, bipolar=False):
         """Set sensor information on Saga channel
 
         :param sensor: sensor

@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file tmsi_sdk.py 
- * @brief 
+ * @file tmsi_sdk.py
+ * @brief
  * Singleton class which handles the discovery of TMSi devices.
  */
 
 
-'''
+"""
 
 from .tmsi_utilities.singleton import Singleton
 from .tmsi_utilities.tmsi_logger import TMSiLoggerActivity
@@ -37,19 +37,22 @@ from .device.devices.apex.apex_device import ApexDevice
 from .device.devices.saga.saga_device import SagaDevice
 
 
-class TMSiSDK(metaclass = Singleton):
+class TMSiSDK(metaclass=Singleton):
     """Singleton class which handles the discovery of TMSi devices"""
+
     def __init__(self):
         """Initializes the object."""
         self.__apex_device_list = []
         self.__apex_dongle_list = []
         self.__saga_device_list = []
-        
-    def discover(self, 
-        dev_type, 
-        dr_interface = DeviceInterfaceType.none, 
-        ds_interface = DeviceInterfaceType.none,
-        num_retries = 3) -> tuple:
+
+    def discover(
+        self,
+        dev_type,
+        dr_interface=DeviceInterfaceType.none,
+        ds_interface=DeviceInterfaceType.none,
+        num_retries=3,
+    ) -> tuple:
         """Discovers if there are available devices.
 
         :param dev_type: device type to search
@@ -74,7 +77,7 @@ class TMSiSDK(metaclass = Singleton):
             TMSiLoggerActivity().log("TMSi-SDK->>SAGA-SDK: discover devices")
             self.__saga_device_list = SagaDevice.get_device_list()
             return (self.__saga_device_list, [])
-    
+
     def get_device_list(self, dev_type) -> list:
         """Gets the list of available devices.
 
@@ -100,7 +103,6 @@ class TMSiSDK(metaclass = Singleton):
         if dev_type == DeviceType.apex:
             return self.__apex_dongle_list
         return []
-        
 
     def get_driver_version(self, dev_type) -> tuple:
         """Gets the driver version
@@ -114,7 +116,7 @@ class TMSiSDK(metaclass = Singleton):
             version = ApexDevice.get_driver_version()
             TMSiLoggerActivity().log("TMSi-SDK->>APEX-SDK: get driver version")
             dll_version = "".join([chr(i) for i in version.DllVersionString if i != 0])
-            usb_version = "".join([chr(i) for i in version.LibUsbVersionString if i != 0])
+            usb_version = "".join(
+                [chr(i) for i in version.LibUsbVersionString if i != 0]
+            )
             return (dll_version, usb_version)
-        
-            

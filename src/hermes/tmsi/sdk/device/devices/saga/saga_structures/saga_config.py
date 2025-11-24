@@ -1,4 +1,4 @@
-'''
+"""
 (c) 2023-2024 Twente Medical Systems International B.V., Oldenzaal The Netherlands
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 #######  #     #   #####   #
-   #     ##   ##  #        
+   #     ##   ##  #
    #     # # # #  #        #
    #     #  #  #   #####   #
    #     #     #        #  #
@@ -22,13 +22,13 @@ limitations under the License.
    #     #     #  #####    #
 
 /**
- * @file saga_config.py 
- * @brief 
+ * @file saga_config.py
+ * @brief
  * SAGA Configuration object.
  */
 
 
-'''
+"""
 
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
@@ -36,11 +36,12 @@ from xml.dom import minidom
 from .....tmsi_utilities.tmsi_logger import TMSiLogger
 from ..saga_API_enums import *
 
-class SagaConfig():
+
+class SagaConfig:
     """Class to handle the configuration of the Saga."""
+
     def __init__(self):
-        """Initialize the configuration.
-        """
+        """Initialize the configuration."""
         self.__base_sample_rate = 4000
         self.__sampling_frequency = 0
         self.__channels = []
@@ -68,21 +69,37 @@ class SagaConfig():
         try:
             root = ET.Element("SagaConfig")
             xml_device = ET.SubElement(root, "Device")
-            ET.SubElement(xml_device, "BaseSampleRateHz").text = str(self.__base_sample_rate)
-            ET.SubElement(xml_device, "ConfiguredInterface").text = str(self.__configured_interface)
+            ET.SubElement(xml_device, "BaseSampleRateHz").text = str(
+                self.__base_sample_rate
+            )
+            ET.SubElement(xml_device, "ConfiguredInterface").text = str(
+                self.__configured_interface
+            )
             ET.SubElement(xml_device, "Triggers").text = str(self.__triggers)
-            ET.SubElement(xml_device, "ReferenceMethod").text = str(self.__reference_method.value)
-            ET.SubElement(xml_device, "AutoReferenceMethod").text = str(self.__auto_reference_method.value)
-            ET.SubElement(xml_device, "DRSyncOutDiv").text = str(self.__dr_sync_out_divider)
-            ET.SubElement(xml_device, "DRSyncOutDutyCycl").text = str(self.__dr_sync_out_duty_cycle)
+            ET.SubElement(xml_device, "ReferenceMethod").text = str(
+                self.__reference_method.value
+            )
+            ET.SubElement(xml_device, "AutoReferenceMethod").text = str(
+                self.__auto_reference_method.value
+            )
+            ET.SubElement(xml_device, "DRSyncOutDiv").text = str(
+                self.__dr_sync_out_divider
+            )
+            ET.SubElement(xml_device, "DRSyncOutDutyCycl").text = str(
+                self.__dr_sync_out_duty_cycle
+            )
             ET.SubElement(xml_device, "RepairLogging").text = str(self.__repair_logging)
 
             xml_channels = ET.SubElement(root, "Channels")
             for idx, channel in enumerate(self.__channels):
                 xml_channel = ET.SubElement(xml_channels, "Channel")
                 ET.SubElement(xml_channel, "ChanNr").text = str(idx)
-                ET.SubElement(xml_channel, "AltChanName").text = channel.get_channel_name()
-                ET.SubElement(xml_channel, "ChanDivider").text = str(channel.get_channel_divider())
+                ET.SubElement(xml_channel, "AltChanName").text = (
+                    channel.get_channel_name()
+                )
+                ET.SubElement(xml_channel, "ChanDivider").text = str(
+                    channel.get_channel_divider()
+                )
             xml_data = SagaConfig.__prettify(root)
             xml_file = open(filename, "w")
             xml_file.write(xml_data)
@@ -102,13 +119,15 @@ class SagaConfig():
         try:
             tree = ET.parse(filename)
             root = tree.getroot()
-            
+
             # check device type
             if root.tag != "SagaConfig" and root.tag != "DeviceConfig":
-                error_message = "IMPOSSIBLE TO LOAD FILE! It is not a SAGA configuration file."
+                error_message = (
+                    "IMPOSSIBLE TO LOAD FILE! It is not a SAGA configuration file."
+                )
                 TMSiLogger().warning(error_message)
                 return False, error_message
-            
+
             # check if imported file has the correct number of channels
             channel_counter = 0
             for elem in root:
@@ -120,14 +139,16 @@ class SagaConfig():
                 # all good, configuring only the device
                 pass
             elif channel_counter < n_channels:
-                error_message = "Configuration file loaded does not have the full list of channels."
+                error_message = (
+                    "Configuration file loaded does not have the full list of channels."
+                )
                 TMSiLogger().warning(error_message)
                 return False, error_message
             elif channel_counter > n_channels:
                 error_message = "Configuration file loaded is not compatible with the device in use, too many channels set."
                 TMSiLogger().warning(error_message)
                 return False, error_message
-            
+
             # fill configuration structure
             for elem in root:
                 for subelem in elem:
@@ -141,7 +162,9 @@ class SagaConfig():
                         if subelem.tag == "ReferenceMethod":
                             self.__reference_method = RefMethod(int(subelem.text))
                         if subelem.tag == "AutoReferenceMethod":
-                            self.__auto_reference_method = AutoRefMethod(int(subelem.text))
+                            self.__auto_reference_method = AutoRefMethod(
+                                int(subelem.text)
+                            )
                         if subelem.tag == "DRSyncOutDiv":
                             self.__dr_sync_out_divider = int(subelem.text)
                         if subelem.tag == "DRSyncOutDutyCycl":
@@ -156,17 +179,19 @@ class SagaConfig():
                                 continue
                             idx = int(idx.text)
                             self.__channels[idx].set_channel_name(
-                                alternative_channel_name = subelem.find("AltChanName").text
+                                alternative_channel_name=subelem.find(
+                                    "AltChanName"
+                                ).text
                             )
                             self.__channels[idx].set_channel_divider(
-                                divider = int(subelem.find("ChanDivider").text),
-                                base_sample_rate = self.__base_sample_rate
+                                divider=int(subelem.find("ChanDivider").text),
+                                base_sample_rate=self.__base_sample_rate,
                             )
             return True, None
         except Exception as e:
             TMSiLogger().warning("{}".format(e))
             return False, error_message
-    
+
     def get_active_channels(self):
         """Get active channels of the device.
 
@@ -230,7 +255,7 @@ class SagaConfig():
         :rtype: list[SagaImpedanceChannel]
         """
         return self.__impedance_channels
-    
+
     def get_impedance_limit(self):
         """Get the impedance limit.
 
@@ -246,7 +271,7 @@ class SagaConfig():
         :rtype: dict
         """
         return {"channels": self.__masked_channels, "functions": self.__mask_functions}
-    
+
     def get_reference_method(self):
         """Get reference method
 
@@ -254,7 +279,7 @@ class SagaConfig():
         :rtype: RefMethog
         """
         return self.__reference_method
-    
+
     def get_repair_logging(self):
         """Get repair logging
 
@@ -278,7 +303,7 @@ class SagaConfig():
         :rtype: int
         """
         return self.__sampling_frequency
-    
+
     def get_triggers(self):
         """Get triggers
 
@@ -286,7 +311,7 @@ class SagaConfig():
         :rtype: int
         """
         return self.__triggers
-    
+
     def set_channels(self, channels):
         """Set channels of the device
 
@@ -294,11 +319,17 @@ class SagaConfig():
         :type channels: list[SagaChannels]
         """
         self.__channels = channels
-        self.__sampling_frequency = int(self.__base_sample_rate / (2**self.__channels[-1].get_channel_divider()))
-        self.__active_channels = [ch for ch in channels if ch.get_channel_divider() != -1]
-        self.__active_imp_channels = [ch for ch in channels if ch.get_channel_imp_divider() != -1]
+        self.__sampling_frequency = int(
+            self.__base_sample_rate / (2 ** self.__channels[-1].get_channel_divider())
+        )
+        self.__active_channels = [
+            ch for ch in channels if ch.get_channel_divider() != -1
+        ]
+        self.__active_imp_channels = [
+            ch for ch in channels if ch.get_channel_imp_divider() != -1
+        ]
         for i in range(len(self.__active_imp_channels)):
-            self.__active_imp_channels[i].set_channel_index(index = i)
+            self.__active_imp_channels[i].set_channel_index(index=i)
 
     def set_sensors(self, sensors):
         """Set sensors of the device
@@ -307,7 +338,7 @@ class SagaConfig():
         :type sensors: list[SagaSensors]
         """
         self.__sensors = sensors
-    
+
     def set_configured_interface(self, configured_interface):
         self.__configured_interface = configured_interface.value
 
@@ -318,7 +349,7 @@ class SagaConfig():
         :type auto_reference_method: AutoReferenceMethod
         """
         self.__auto_reference_method = auto_reference_method
-        
+
     def set_device_config(self, device_config):
         """Set device configuration
 
@@ -329,7 +360,7 @@ class SagaConfig():
         self.__triggers = device_config.TriggersEnabled
         self.__reference_method = RefMethod(device_config.RefMethod)
         self.__auto_reference_method = AutoRefMethod(device_config.AutoRefMethod)
-        self.__device_name = device_config.DeviceName.decode('windows-1252')
+        self.__device_name = device_config.DeviceName.decode("windows-1252")
         self.__dr_sync_out_divider = device_config.DRSyncOutDiv
         self.__dr_sync_out_duty_cycle = device_config.DRSyncOutDutyCycl
         self.__repair_logging = device_config.RepairLogging
@@ -342,7 +373,7 @@ class SagaConfig():
         :type channels: list[SagaImpedanceChannel]
         """
         self.__impedance_channels = channels
-        
+
     def set_device_reference_method(self, reference_method):
         """Set reference method of the device.
 
@@ -350,7 +381,7 @@ class SagaConfig():
         :type reference_method: ReferenceMethod
         """
         self.__reference_method = reference_method
-        
+
     def set_dr_sync_out_divider(self, divider):
         """Set dr sync out divider
 
@@ -366,7 +397,7 @@ class SagaConfig():
         :type duty_cycle: int
         """
         self.__dr_sync_out_duty_cycle = duty_cycle
-    
+
     def set_mask_info(self, channels, functions):
         """Set mask info
 
@@ -377,8 +408,8 @@ class SagaConfig():
         """
         self.__mask_functions = functions
         self.__masked_channels = channels
-    
-    def set_repair_logging(self, enable_repair_logging = True):
+
+    def set_repair_logging(self, enable_repair_logging=True):
         """Set the repair logging
 
         :param enable_repair_logging: enable or not the repair logging, defaults to True
@@ -388,22 +419,20 @@ class SagaConfig():
             self.__repair_logging = 1
         else:
             self.__repair_logging = 0
-    
+
     def set_triggers(self, triggers):
         """Set triggers
 
-        :param triggers: True if enabled, False otherwise 
+        :param triggers: True if enabled, False otherwise
         :type triggers: bool
         """
         if triggers:
             self.__triggers = 1
         else:
             self.__triggers = 0
-    
+
     def __prettify(elem):
-        """Return a pretty-printed XML string for the Element.
-        """
-        rough_string = ET.tostring(elem, 'utf-8')
+        """Return a pretty-printed XML string for the Element."""
+        rough_string = ET.tostring(elem, "utf-8")
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
-
