@@ -27,7 +27,6 @@
 
 import queue
 import time
-from hermes.utils.types import LoggingSpec
 import numpy as np
 
 from .sdk.device.tmsi_device import TMSiDevice
@@ -46,6 +45,7 @@ from .sdk.device.tmsi_channel import ChannelType
 from hermes.base.nodes.producer import Producer
 from hermes.utils.zmq_utils import PORT_BACKEND, PORT_SYNC_HOST, PORT_KILL
 from hermes.utils.time_utils import get_time
+from hermes.utils.types import LoggingSpec
 
 from hermes.tmsi.stream import TmsiStream
 

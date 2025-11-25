@@ -8,5 +8,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## HERMES TMSi SAGA
 
+### 0.0.2 <small>November 25, 2025</small>
+- Installation instructions.
+
 ### 0.0.1 <small>October 21, 2025</small>
 - Initial public release of an optional TMSi SAGA physiological signals HERMES package.

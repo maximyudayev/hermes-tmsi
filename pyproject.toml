@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pysio-hermes-tmsi"
 dynamic = ["version"]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 authors = [
   { name="Maxim Yudayev", email="maxim.yudayev@gmail.com" },
   { name="e-Media Research Lab @ KU Leuven" },
@@ -30,7 +30,6 @@ classifiers = [
 ]
 dependencies = [
   "pysio-hermes",
-  # "pysio-tmsi"
 ]
 
 [tool.setuptools.dynamic]
