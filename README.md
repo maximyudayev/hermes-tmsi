@@ -25,7 +25,7 @@ pip install -e hermes-tmsi
 ```
 
 ## Usage
-Using the device follows the standard [configuration file specification](https://maximyudayev.github.io/hermes/) process of HERMES nodes.
+Using the device follows the standard [configuration file specification](https://yudayev.com/hermes) process of HERMES nodes.
 
 > [!NOTE]
 > [These modalities](https://github.com/maximyudayev/hermes-tmsi/blob/main/src/hermes/tmsi/stream.py#L44-L87) are collected out-of-the-box. Change them and the [SDK configuration](https://github.com/maximyudayev/hermes-tmsi/blob/main/src/hermes/tmsi/producer.py#L132-L159) to add or replace modalities with sensors of choice.
