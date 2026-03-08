@@ -68,7 +68,6 @@ class TmsiProducer(Producer):
         transmit_delay_sample_period_s: float = float("nan"),
         **_
     ) -> None:
-
         stream_out_spec = {"sampling_rate_hz": sampling_rate_hz}
 
         super().__init__(
