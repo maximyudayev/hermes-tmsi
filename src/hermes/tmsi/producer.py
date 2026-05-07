@@ -53,12 +53,9 @@ from hermes.tmsi.stream import TmsiStream
 class TmsiProducer(Producer):
     """A class to interface TMSi SAGA device."""
 
-    @classmethod
-    def _log_source_tag(cls) -> str:
-        return "tmsi"
-
     def __init__(
         self,
+        topic: str,
         host_ip: str,
         logging_spec: LoggingSpec,
         sampling_rate_hz: int = 20,
@@ -71,6 +68,7 @@ class TmsiProducer(Producer):
         stream_out_spec = {"sampling_rate_hz": sampling_rate_hz}
 
         super().__init__(
+            topic=topic,
             host_ip=host_ip,
             stream_out_spec=stream_out_spec,
             logging_spec=logging_spec,
@@ -223,22 +221,22 @@ class TmsiProducer(Producer):
         try:
             new_data: SampleData = self.data_queue.get(timeout=10.0)
             process_time_s = get_time()
-            sample_block = np.array(
-                array_to_matrix(new_data.samples, new_data.num_samples_per_sample_set)
+            # sample_block = np.array(
+            #     array_to_matrix(new_data.samples, new_data.num_samples_per_sample_set)
+            # )
+            tag: str = "%s.data" % self.topic
+            # for sample in sample_block.T:
+            #     data = {
+            #         "BIP-01": sample[0],
+            #         "BIP-02": sample[1],
+            #         "breath": sample[2],
+            #         "GSR": sample[3],
+            #         "SPO2": sample[4],
+            #         "counter": sample[-1],
+            #     }
+            self._publish(
+                tag=tag, process_time_s=process_time_s, data=data
             )
-            tag: str = "%s.data" % self._log_source_tag()
-            for sample in sample_block.T:
-                data = {
-                    "BIP-01": sample[0],
-                    "BIP-02": sample[1],
-                    "breath": sample[2],
-                    "GSR": sample[3],
-                    "SPO2": sample[4],
-                    "counter": sample[-1],
-                }
-                self._publish(
-                    tag=tag, process_time_s=process_time_s, data={"tmsi-data": data}
-                )
         except queue.Empty:
             if not self._is_continue_capture:
                 self._send_end_packet()
