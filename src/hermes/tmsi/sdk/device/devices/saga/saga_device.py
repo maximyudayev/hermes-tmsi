@@ -1722,7 +1722,6 @@ class SagaDevice(TMSiDevice):
 
         dev_channel_list = (TMSiDevSetChCfg * self.__info.get_num_channels())()
         for idx, saga_channel in enumerate(self.__config.get_channels()):
-
             dev_channel_list[idx].ChanNr = idx
             dev_channel_list[idx].ChanDivider = saga_channel.get_channel_divider()
             max_len = len(saga_channel.get_channel_name())

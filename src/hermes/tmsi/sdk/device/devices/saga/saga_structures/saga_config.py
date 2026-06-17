@@ -94,9 +94,9 @@ class SagaConfig:
             for idx, channel in enumerate(self.__channels):
                 xml_channel = ET.SubElement(xml_channels, "Channel")
                 ET.SubElement(xml_channel, "ChanNr").text = str(idx)
-                ET.SubElement(xml_channel, "AltChanName").text = (
-                    channel.get_channel_name()
-                )
+                ET.SubElement(
+                    xml_channel, "AltChanName"
+                ).text = channel.get_channel_name()
                 ET.SubElement(xml_channel, "ChanDivider").text = str(
                     channel.get_channel_divider()
                 )

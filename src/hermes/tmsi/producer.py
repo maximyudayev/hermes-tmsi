@@ -27,6 +27,7 @@
 
 import queue
 import time
+from typing import Optional
 import numpy as np
 
 from .sdk.device.tmsi_device import TMSiDevice
@@ -58,15 +59,22 @@ class TmsiProducer(Producer):
         topic: str,
         host_ip: str,
         logging_spec: LoggingSpec,
-        sampling_rate_hz: int = 20,
-        port_pub: str = PORT_BACKEND,
-        port_sync: str = PORT_SYNC_HOST,
-        port_killsig: str = PORT_KILL,
-        transmit_delay_sample_period_s: float = float("nan"),
-        sensors: list[str] | None = None,
-        **_
+        sensor_mapping: dict,
+        batch_send_rate_hz: Optional[int] = 20,
+        sampling_rate_hz: Optional[int] = 1000,
+        buf_len: Optional[int] = 100000,
+        port_pub: Optional[str] = PORT_BACKEND,
+        port_sync: Optional[str] = PORT_SYNC_HOST,
+        port_killsig: Optional[str] = PORT_KILL,
+        transmit_delay_sample_period_s: Optional[float] = float("nan"),
+        **_,
     ) -> None:
-        stream_out_spec = {"sampling_rate_hz": sampling_rate_hz}
+        stream_out_spec = {
+            "sensor_mapping": sensor_mapping,
+            "batch_send_rate_hz": batch_send_rate_hz,
+            "sampling_rate_hz": sampling_rate_hz,
+            "buf_len": buf_len,
+        }
 
         super().__init__(
             topic=topic,
@@ -80,16 +88,27 @@ class TmsiProducer(Producer):
             transmit_delay_sample_period_s=transmit_delay_sample_period_s,
         )
 
-        # setting up active sensors
-        self.channel_names_with_mapping = {"ECG": 65, "breath": 69, "GSR": 72, "SPO2": 78}
-        
-        # Sort the devices list based on their mapped integer values
-        self._sensors = sorted(sensors, key=lambda d: self.channel_names_with_mapping.get(d, 999))
+        self._sensor_mapping = dict(
+            map(lambda x: (x[0], x[1]["channel"]), sensor_mapping.items())
+        )
+        self._sensors = sorted(
+            sensor_mapping, key=lambda d: self._sensor_mapping.get(d, 999)
+        )
 
-        # wrap data in dict, last element of data is a counter, rest are sensors in the order of self._sensors
-        self.build_data_dict = lambda sample_block: {'tmsi-data': {
-            sensor: sample_block[idx].reshape(-1, 1) for idx, sensor in enumerate(self._sensors)
-        } | {"counter": sample_block[-1].reshape(-1, 1)}}
+        # Wrap data in dict, last element of data is a counter, rest are sensors in the order of `self._sensors`.
+        self.build_data_dict_fn = lambda sample_block, toa_s: {
+            "tmsi-data": {
+                sensor: sample_block[idx].reshape(-1, 1)
+                for idx, sensor in enumerate(self._sensors)
+            }
+            | {
+                "counter": sample_block[-1].reshape(-1, 1),
+                "toa_s": np.zeros(
+                    [sample_block[-1].reshape(-1, 1).shape[0]], dtype=np.float64
+                )
+                + toa_s,
+            }
+        }
 
     @classmethod
     def create_stream(cls, stream_spec: dict) -> TmsiStream:
@@ -99,8 +118,11 @@ class TmsiProducer(Producer):
         return None
 
     def _connect(self) -> bool:
-        
-        print(f"Current expected connected devices (Make sure they are connected during setup and in the right port): {self._sensors}", flush=True)
+        print(
+            f"Current expected connected devices: {self._sensors.keys()}\n",
+            f"Make sure they are connected during setup and in the right port",
+            flush=True,
+        )
 
         try:
             TMSiSDK().discover(
@@ -168,9 +190,10 @@ class TmsiProducer(Producer):
                 #     # 86,
                 # ]
                 activated_channels = [
-                    self.channel_names_with_mapping[sensor] for sensor in self._sensors if sensor in self.channel_names_with_mapping
+                    self._sensor_mapping[sensor]
+                    for sensor in self._sensors
+                    if sensor in self._sensor_mapping
                 ]
-
 
                 self.device.set_device_active_channels(list(range(90)), False)
                 self.device.set_device_active_channels(activated_channels, True)
@@ -207,7 +230,7 @@ class TmsiProducer(Producer):
                 # Get the handle to the first discovered device and open the connection.
                 for device in discovered_devices:
                     if device.get_dr_interface() == DeviceInterfaceType.wifi:
-                        # Open the connection to SAGA
+                        # Open the connection to SAGA.
                         self.device = device
                         self.device.open()
                         break
@@ -240,16 +263,14 @@ class TmsiProducer(Producer):
     def _process_data(self) -> None:
         try:
             new_data: SampleData = self.data_queue.get(timeout=10.0)
-            process_time_s = get_time()
+            toa_s = get_time()
             sample_block = np.array(
                 array_to_matrix(new_data.samples, new_data.num_samples_per_sample_set)
             )
             tag: str = "%s.data" % self.topic
-            
-            data = self.build_data_dict(sample_block)
-            self._publish(
-                tag=tag, process_time_s=process_time_s, data=data
-            )
+
+            data = self.build_data_dict_fn(sample_block, toa_s)
+            self._publish(tag=tag, process_time_s=get_time(), data=data)
         except queue.Empty:
             if not self._is_continue_capture:
                 self._send_end_packet()

@@ -46,7 +46,6 @@ SagaDllLocked = True
 
 
 if platform == "linux" or platform == "linux2":
-
     so_name = "libTMSiSagaDeviceLib.so"
     soabspath = os.path.sep + os.path.join("usr", "lib", so_name)
     dlclose_func = cdll.LoadLibrary("").dlclose

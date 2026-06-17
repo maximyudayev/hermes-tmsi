@@ -1787,9 +1787,9 @@ class ApexDevice(TMSiDevice):
         if len(list_indices) > 0:
             for i in range(len(list_indices)):
                 if list_indices[i] < len(device_channel_reference_list):
-                    device_channel_reference_list[list_indices[i]].ChanRefStatus = (
-                        list_references[i]
-                    )
+                    device_channel_reference_list[
+                        list_indices[i]
+                    ].ChanRefStatus = list_references[i]
         self.__last_error_code = TMSiSetDeviceReferenceConfig(
             self.__device_handle,
             pointer(device_channel_reference_list),

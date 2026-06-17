@@ -60,10 +60,29 @@ producer_specs:
     topic: "tmsi"
     settings:
       sampling_rate_hz: 1000
+      batch_send_rate_hz: 20
+      buf_len: 100000
       sensors:
-        - "ECG"
-        - "breath"
-        - "GSR"
+        ecg:
+          channel: 65
+          dtype: "float32"
+          shape:
+            - 1
+        breath:
+          channel: 69
+          dtype: "float32"
+          shape:
+            - 1
+        gsr:
+          channel: 72
+          dtype: "float32"
+          shape:
+            - 1
+        spo2:
+          channel: 78
+          dtype: "float32"
+          shape:
+            - 1
       
 
 consumer_specs: []

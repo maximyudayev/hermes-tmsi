@@ -71,9 +71,9 @@ class ApexConfig:
             for idx, channel in enumerate(self.__channels):
                 xml_channel = ET.SubElement(xml_channels, "Channel")
                 ET.SubElement(xml_channel, "ChanIdx").text = str(idx)
-                ET.SubElement(xml_channel, "AltChanName").text = (
-                    channel.get_channel_name()
-                )
+                ET.SubElement(
+                    xml_channel, "AltChanName"
+                ).text = channel.get_channel_name()
                 ET.SubElement(xml_channel, "ReferenceStatus").text = str(
                     channel.is_reference()
                 )
