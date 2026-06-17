@@ -59,8 +59,12 @@ producer_specs:
     class: "TmsiProducer"
     topic: "tmsi"
     settings:
-      sampling_rate_hz: 20
-
+      sampling_rate_hz: 1000
+      sensors:
+        - "ECG"
+        - "breath"
+        - "GSR"
+      
 
 consumer_specs: []
 

@@ -63,6 +63,7 @@ class TmsiProducer(Producer):
         port_sync: str = PORT_SYNC_HOST,
         port_killsig: str = PORT_KILL,
         transmit_delay_sample_period_s: float = float("nan"),
+        sensors: list[str] | None = None,
         **_
     ) -> None:
         stream_out_spec = {"sampling_rate_hz": sampling_rate_hz}
@@ -79,6 +80,17 @@ class TmsiProducer(Producer):
             transmit_delay_sample_period_s=transmit_delay_sample_period_s,
         )
 
+        # setting up active sensors
+        self.channel_names_with_mapping = {"ECG": 65, "breath": 69, "GSR": 72, "SPO2": 78}
+        
+        # Sort the devices list based on their mapped integer values
+        self._sensors = sorted(sensors, key=lambda d: self.channel_names_with_mapping.get(d, 999))
+
+        # wrap data in dict, last element of data is a counter, rest are sensors in the order of self._sensors
+        self.build_data_dict = lambda sample_block: {'tmsi-data': {
+            sensor: sample_block[idx].reshape(-1, 1) for idx, sensor in enumerate(self._sensors)
+        } | {"counter": sample_block[-1].reshape(-1, 1)}}
+
     @classmethod
     def create_stream(cls, stream_spec: dict) -> TmsiStream:
         return TmsiStream(**stream_spec)
@@ -87,6 +99,9 @@ class TmsiProducer(Producer):
         return None
 
     def _connect(self) -> bool:
+        
+        print(f"Current expected connected devices (Make sure they are connected during setup and in the right port): {self._sensors}", flush=True)
+
         try:
             TMSiSDK().discover(
                 dev_type=DeviceType.saga,
@@ -137,21 +152,26 @@ class TmsiProducer(Producer):
                 # 72 gsr
                 # 78 blood oxy
                 # 79, 80, 81, 82, 83, 84, 85, 86 -> sensors
+                # activated_channels = [
+                #     65,
+                #     66,
+                #     69,
+                #     72,
+                #     78,
+                #     # 79,
+                #     # 80,
+                #     # 81,
+                #     # 82,
+                #     # 83,
+                #     # 84,
+                #     # 85,
+                #     # 86,
+                # ]
                 activated_channels = [
-                    65,
-                    66,
-                    69,
-                    72,
-                    78,
-                    79,
-                    80,
-                    81,
-                    82,
-                    83,
-                    84,
-                    85,
-                    86,
+                    self.channel_names_with_mapping[sensor] for sensor in self._sensors if sensor in self.channel_names_with_mapping
                 ]
+
+
                 self.device.set_device_active_channels(list(range(90)), False)
                 self.device.set_device_active_channels(activated_channels, True)
 
@@ -221,19 +241,12 @@ class TmsiProducer(Producer):
         try:
             new_data: SampleData = self.data_queue.get(timeout=10.0)
             process_time_s = get_time()
-            # sample_block = np.array(
-            #     array_to_matrix(new_data.samples, new_data.num_samples_per_sample_set)
-            # )
+            sample_block = np.array(
+                array_to_matrix(new_data.samples, new_data.num_samples_per_sample_set)
+            )
             tag: str = "%s.data" % self.topic
-            # for sample in sample_block.T:
-            #     data = {
-            #         "BIP-01": sample[0],
-            #         "BIP-02": sample[1],
-            #         "breath": sample[2],
-            #         "GSR": sample[3],
-            #         "SPO2": sample[4],
-            #         "counter": sample[-1],
-            #     }
+            
+            data = self.build_data_dict(sample_block)
             self._publish(
                 tag=tag, process_time_s=process_time_s, data=data
             )

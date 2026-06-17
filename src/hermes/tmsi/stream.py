@@ -33,7 +33,7 @@ class TmsiStream(Stream):
 
     def __init__(
         self,
-        sampling_rate_hz: int = 20,
+        sampling_rate_hz: int = 1000,
         transmission_delay_period_s: int | None = None,
         **_
     ) -> None:
@@ -45,42 +45,35 @@ class TmsiStream(Stream):
             device_name="tmsi-data",
             stream_name="breath",
             data_type="float32",
-            sample_size=[1],
+            sample_size=(1,),
             sampling_rate_hz=self._sampling_rate_hz,
         )
         self.add_stream(
             device_name="tmsi-data",
             stream_name="GSR",
             data_type="float32",
-            sample_size=[1],
+            sample_size=(1,),
             sampling_rate_hz=self._sampling_rate_hz,
         )
         self.add_stream(
             device_name="tmsi-data",
             stream_name="SPO2",
             data_type="float32",
-            sample_size=[1],
+            sample_size=(1,),
             sampling_rate_hz=self._sampling_rate_hz,
         )
         self.add_stream(
             device_name="tmsi-data",
-            stream_name="BIP-01",
+            stream_name="ECG",
             data_type="float32",
-            sample_size=[1],
-            sampling_rate_hz=self._sampling_rate_hz,
-        )
-        self.add_stream(
-            device_name="tmsi-data",
-            stream_name="BIP-02",
-            data_type="float32",
-            sample_size=[1],
+            sample_size=(1,),
             sampling_rate_hz=self._sampling_rate_hz,
         )
         self.add_stream(
             device_name="tmsi-data",
             stream_name="counter",
             data_type="int32",
-            sample_size=[1],
+            sample_size=(1,),
             sampling_rate_hz=self._sampling_rate_hz,
             is_measure_rate_hz=True,
         )
