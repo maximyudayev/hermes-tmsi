@@ -104,7 +104,7 @@ class TmsiProducer(Producer):
             | {
                 "counter": sample_block[-1].reshape(-1, 1),
                 "toa_s": np.zeros(
-                    [sample_block[-1].reshape(-1, 1).shape[0]], dtype=np.float64
+                    [sample_block[-1].shape[0], 1], dtype=np.float64
                 )
                 + toa_s,
             }
@@ -118,13 +118,14 @@ class TmsiProducer(Producer):
         return None
 
     def _connect(self) -> bool:
-        print(
-            f"Current expected connected devices: {self._sensors.keys()}\n",
-            f"Make sure they are connected during setup and in the right port",
-            flush=True,
-        )
-
+        is_success = False
         try:
+            print(
+                f"Current expected connected devices: {self._sensors}\n",
+                f"Make sure they are connected during setup and in the right port",
+                flush=True,
+            )
+
             TMSiSDK().discover(
                 dev_type=DeviceType.saga,
                 dr_interface=DeviceInterfaceType.docked,
@@ -245,12 +246,12 @@ class TmsiProducer(Producer):
                     "SAGA", "Successfully connected to the TMSi streamer.", flush=True
                 )
                 self.device.start_measurement(MeasurementType.SAGA_SIGNAL)
-                return True
-            return False
+                is_success = True
         except Exception as e:
             print(e)
             print("SAGA", "Unsuccessful connection to the TMSi streamer.", flush=True)
-            return False
+
+        return is_success
 
     def _keep_samples(self) -> None:
         # Clear the buffer queue of accumulated values during the system bring-up.

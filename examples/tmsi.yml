@@ -62,7 +62,7 @@ producer_specs:
       sampling_rate_hz: 1000
       batch_send_rate_hz: 20
       buf_len: 100000
-      sensors:
+      sensor_mapping:
         ecg:
           channel: 65
           dtype: "float32"

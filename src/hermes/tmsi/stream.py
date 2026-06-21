@@ -67,6 +67,7 @@ class TmsiStream(Stream):
             stream_name="counter",
             data_type="uint32",
             sample_size=[1],
+            buf_len=buf_len,
             sampling_rate_hz=self._sampling_rate_hz,
             data_notes=self._data_notes["tmsi-data"]["counter"],
         )
@@ -75,6 +76,7 @@ class TmsiStream(Stream):
             stream_name="toa_s",
             data_type="float64",
             sample_size=[1],
+            buf_len=buf_len,
             sampling_rate_hz=self._sampling_rate_hz,
             is_measure_rate_hz=True,
             data_notes=self._data_notes["tmsi-data"]["toa_s"],
@@ -86,6 +88,7 @@ class TmsiStream(Stream):
                 stream_name="transmission_delay",
                 data_type="float32",
                 sample_size=[1],
+                buf_len=buf_len,
                 sampling_rate_hz=1.0 / self._transmission_delay_period_s,
             )
 
