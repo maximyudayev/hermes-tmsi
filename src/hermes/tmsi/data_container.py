@@ -27,10 +27,10 @@
 
 from typing import Optional, OrderedDict
 
-from hermes.base.stream import Stream
+from hermes.base.data_container import DataContainer
 
 
-class TmsiStream(Stream):
+class TmsiDataContainer(DataContainer):
     """A structure to store TMSi SAGA stream's data."""
 
     def __init__(
@@ -52,40 +52,40 @@ class TmsiStream(Stream):
         self._define_data_notes()
 
         for sensor_name, sensor_spec in sensor_mapping.items():
-            self.add_stream(
-                device_name="tmsi-data",
-                stream_name=sensor_name,
+            self.add_channel(
+                bundle_name="tmsi_data",
+                channel_name=sensor_name,
                 data_type=sensor_spec["dtype"],
                 sample_size=sensor_spec["shape"],
                 buf_len=buf_len,
                 sampling_rate_hz=self._sampling_rate_hz,
-                data_notes=self._data_notes["tmsi-data"].get(sensor_name, {}),
+                data_notes=self._data_notes["tmsi_data"].get(sensor_name, {}),
             )
 
-        self.add_stream(
-            device_name="tmsi-data",
-            stream_name="counter",
+        self.add_channel(
+            bundle_name="tmsi_data",
+            channel_name="counter",
             data_type="uint32",
             sample_size=[1],
             buf_len=buf_len,
             sampling_rate_hz=self._sampling_rate_hz,
-            data_notes=self._data_notes["tmsi-data"]["counter"],
+            data_notes=self._data_notes["tmsi_data"]["counter"],
         )
-        self.add_stream(
-            device_name="tmsi-data",
-            stream_name="toa_s",
+        self.add_channel(
+            bundle_name="tmsi_data",
+            channel_name="toa_s",
             data_type="float64",
             sample_size=[1],
             buf_len=buf_len,
             sampling_rate_hz=self._sampling_rate_hz,
             is_measure_rate_hz=True,
-            data_notes=self._data_notes["tmsi-data"]["toa_s"],
+            data_notes=self._data_notes["tmsi_data"]["toa_s"],
         )
 
         if self._transmission_delay_period_s:
-            self.add_stream(
-                device_name="tmsi-connection",
-                stream_name="transmission_delay",
+            self.add_channel(
+                bundle_name="tmsi_connection",
+                channel_name="transmission_delay",
                 data_type="float32",
                 sample_size=[1],
                 buf_len=buf_len,
@@ -93,12 +93,12 @@ class TmsiStream(Stream):
             )
 
     def get_fps(self) -> dict[str, float | None]:
-        return {"tmsi-data": super()._get_fps("tmsi-data", "toa_s")}
+        return {"tmsi_data": super()._get_fps("tmsi_data", "toa_s")}
 
     def _define_data_notes(self):
         self._data_notes = {}
-        self._data_notes["tmsi-data"] = {}
-        self._data_notes["tmsi-data"]["ecg"] = OrderedDict(
+        self._data_notes["tmsi_data"] = {}
+        self._data_notes["tmsi_data"]["ecg"] = OrderedDict(
             [
                 (
                     "Notes",
@@ -110,7 +110,7 @@ class TmsiStream(Stream):
                 ),
             ]
         )
-        self._data_notes["tmsi-data"]["breath"] = OrderedDict(
+        self._data_notes["tmsi_data"]["breath"] = OrderedDict(
             [
                 (
                     "Notes",
@@ -122,7 +122,7 @@ class TmsiStream(Stream):
                 ),
             ]
         )
-        self._data_notes["tmsi-data"]["gsr"] = OrderedDict(
+        self._data_notes["tmsi_data"]["gsr"] = OrderedDict(
             [
                 (
                     "Notes",
@@ -134,7 +134,7 @@ class TmsiStream(Stream):
                 ),
             ]
         )
-        self._data_notes["tmsi-data"]["spo2"] = OrderedDict(
+        self._data_notes["tmsi_data"]["spo2"] = OrderedDict(
             [
                 (
                     "Notes",
@@ -146,7 +146,7 @@ class TmsiStream(Stream):
                 ),
             ]
         )
-        self._data_notes["tmsi-data"]["counter"] = OrderedDict(
+        self._data_notes["tmsi_data"]["counter"] = OrderedDict(
             [
                 (
                     "Notes",
@@ -154,7 +154,7 @@ class TmsiStream(Stream):
                 ),
             ]
         )
-        self._data_notes["tmsi-data"]["toa_s"] = OrderedDict(
+        self._data_notes["tmsi_data"]["toa_s"] = OrderedDict(
             [
                 (
                     "Notes",

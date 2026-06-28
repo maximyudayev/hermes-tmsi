@@ -48,7 +48,7 @@ from hermes.utils.zmq_utils import PORT_BACKEND, PORT_SYNC_HOST, PORT_KILL
 from hermes.utils.time_utils import get_time
 from hermes.utils.types import LoggingSpec
 
-from hermes.tmsi.stream import TmsiStream
+from hermes.tmsi.data_container import TmsiDataContainer
 
 
 class TmsiProducer(Producer):
@@ -69,7 +69,7 @@ class TmsiProducer(Producer):
         transmit_delay_sample_period_s: Optional[float] = float("nan"),
         **_,
     ) -> None:
-        stream_out_spec = {
+        data_out_spec = {
             "sensor_mapping": sensor_mapping,
             "batch_send_rate_hz": batch_send_rate_hz,
             "sampling_rate_hz": sampling_rate_hz,
@@ -79,7 +79,7 @@ class TmsiProducer(Producer):
         super().__init__(
             topic=topic,
             host_ip=host_ip,
-            stream_out_spec=stream_out_spec,
+            data_out_spec=data_out_spec,
             logging_spec=logging_spec,
             sampling_rate_hz=sampling_rate_hz,
             port_pub=port_pub,
@@ -97,7 +97,7 @@ class TmsiProducer(Producer):
 
         # Wrap data in dict, last element of data is a counter, rest are sensors in the order of `self._sensors`.
         self.build_data_dict_fn = lambda sample_block, toa_s: {
-            "tmsi-data": {
+            "tmsi_data": {
                 sensor: sample_block[idx].reshape(-1, 1)
                 for idx, sensor in enumerate(self._sensors)
             }
@@ -111,8 +111,8 @@ class TmsiProducer(Producer):
         }
 
     @classmethod
-    def create_stream(cls, stream_spec: dict) -> TmsiStream:
-        return TmsiStream(**stream_spec)
+    def create_data_container(cls, data_spec: dict) -> TmsiDataContainer:
+        return TmsiDataContainer(**data_spec)
 
     def _ping_device(self) -> None:
         return None
