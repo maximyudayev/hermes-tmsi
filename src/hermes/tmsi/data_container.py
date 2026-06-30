@@ -106,7 +106,7 @@ class TmsiDataContainer(DataContainer):
                 ),
                 (
                     "TMSi channel",
-                    str(self._sensor_mapping.get("gsr", {"channel": 65})["channel"]),
+                    str(self._sensor_mapping.get("ecg", {"channel": [65, 66]})["channel"]),
                 ),
             ]
         )
@@ -118,7 +118,7 @@ class TmsiDataContainer(DataContainer):
                 ),
                 (
                     "TMSi channel",
-                    str(self._sensor_mapping.get("breath", {"channel": 69})["channel"]),
+                    str(self._sensor_mapping.get("breath", {"channel": [69]})["channel"]),
                 ),
             ]
         )
@@ -130,7 +130,7 @@ class TmsiDataContainer(DataContainer):
                 ),
                 (
                     "TMSi channel",
-                    str(self._sensor_mapping.get("gsr", {"channel": 72})["channel"]),
+                    str(self._sensor_mapping.get("gsr", {"channel": [72]})["channel"]),
                 ),
             ]
         )
@@ -142,7 +142,7 @@ class TmsiDataContainer(DataContainer):
                 ),
                 (
                     "TMSi channel",
-                    str(self._sensor_mapping.get("gsr", {"channel": 78})["channel"]),
+                    str(self._sensor_mapping.get("spo2", {"channel": [78]})["channel"]),
                 ),
             ]
         )

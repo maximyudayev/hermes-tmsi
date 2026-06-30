@@ -92,7 +92,7 @@ class TmsiProducer(Producer):
             map(lambda x: (x[0], x[1]["channel"]), sensor_mapping.items())
         )
         self._sensors = sorted(
-            sensor_mapping, key=lambda d: self._sensor_mapping.get(d, 999)
+            sensor_mapping, key=lambda d: self._sensor_mapping[d][0]
         )
 
         # Wrap data in dict, last element of data is a counter, rest are sensors in the order of `self._sensors`.
@@ -164,35 +164,11 @@ class TmsiProducer(Producer):
                     channel_type=ChannelType.all_types,
                     channel_divider=4,
                 )
-                # NOTE: must match the hardcoded specs else wrong sensors will be read out.
-                # channels
-                # oxy goes to digi
-                # breath to aux 1
-                # gsr aux 2
-                # double bip to bipolar
-                # 65 66 double bipolar
-                # 69 breath
-                # 72 gsr
-                # 78 blood oxy
-                # 79, 80, 81, 82, 83, 84, 85, 86 -> sensors
-                # activated_channels = [
-                #     65,
-                #     66,
-                #     69,
-                #     72,
-                #     78,
-                #     # 79,
-                #     # 80,
-                #     # 81,
-                #     # 82,
-                #     # 83,
-                #     # 84,
-                #     # 85,
-                #     # 86,
-                # ]
+
                 activated_channels = [
-                    self._sensor_mapping[sensor]
+                    channel
                     for sensor in self._sensors
+                    for channel in self._sensor_mapping[sensor]
                     if sensor in self._sensor_mapping
                 ]
 

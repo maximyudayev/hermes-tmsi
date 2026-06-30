@@ -27,8 +27,13 @@ pip install -e hermes-tmsi
 ## Usage
 Using the device follows the standard [configuration file specification](https://yudayev.com/hermes) process of HERMES nodes.
 
-> [!NOTE]
-> [These modalities](https://github.com/maximyudayev/hermes-tmsi/blob/main/src/hermes/tmsi/stream.py#L44-L87) are collected out-of-the-box. Change them and the [SDK configuration](https://github.com/maximyudayev/hermes-tmsi/blob/main/src/hermes/tmsi/producer.py#L132-L159) to add or replace modalities with sensors of choice.
+> [!IMPORTANT] Channels specified in YAML must match the actual port to which an analog sensor is connected. Else wrong sensors will be read out.
+> | Device | Port | Channel |
+> | - | - | - |
+> | ECG | BIP-01 | [65, 66] |
+> | Breath | AUX-01 | [69] |
+> | GSR | AUX-02 | [72] |
+> | SpO2 | DIGI | [78] |
 
 ## Citation
 When using any parts of this repository outside of its intended use, please cite the parent project [HERMES](https://github.com/maximyudayev/hermes).
