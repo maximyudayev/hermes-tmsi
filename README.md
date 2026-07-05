@@ -27,13 +27,21 @@ pip install -e hermes-tmsi
 ## Usage
 Using the device follows the standard [configuration file specification](https://yudayev.com/hermes) process of HERMES nodes.
 
-> [!IMPORTANT] Channels specified in YAML must match the actual port to which an analog sensor is connected. Else wrong sensors will be read out.
+> [!IMPORTANT]
+> Channels specified in YAML must match the actual port to which an analog sensor is connected. Else wrong sensors will be read out.
 > | Device | Port | Channel |
 > | - | - | - |
-> | ECG | BIP-01 | [65, 66] |
-> | Breath | AUX-01 | [69] |
-> | GSR | AUX-02 | [72] |
-> | SpO2 | DIGI | [78] |
+> | | UNI | [1-32] OR [1-64][^1] |
+> | ECG (1-ch) | BIP-01 | [65] |
+> | Respiration (1-ch) | AUX-01 | [69] |
+> | GSR (1-ch) | AUX-02 | [72] |
+> | SpO2 | DIGI | [79] |
+
+[^1]: 32-/64-channel unipolar connections available, depending on the SAGA device.
+
+> [!IMPORTANT]
+> 1. Always add the patient ground lead to ensure physiological signals on BIP and AUX ports are not floating.
+> 1. Add stress relief loops on the sensor leads to avoid motion artifacts in the data, when accidentally tagging on the wires.
 
 ## Citation
 When using any parts of this repository outside of its intended use, please cite the parent project [HERMES](https://github.com/maximyudayev/hermes).

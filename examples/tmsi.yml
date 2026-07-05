@@ -38,7 +38,7 @@ remote_kill_ip: null
 
 
 logging_spec:
-  stream_period_s     : 30
+  stream_period_s     : 10
   is_quiet            : False
 
   stream_hdf5         : True
@@ -60,30 +60,34 @@ producer_specs:
     class: "TmsiProducer"
     topic: "tmsi"
     settings:
-      sampling_rate_hz: 1000
-      batch_send_rate_hz: 20
+      base_sample_rate: "Decimal"
+      sample_rate_divider: 4
       buf_len: 100000
       sensor_mapping:
         ecg:
-          channel: [65, 66]
+          port: "BIP"
+          channel: [65]
           dtype: "float32"
           shape:
             - 1
-        breath:
+        respiration:
+          port: "AUX"
           channel: [69]
           dtype: "float32"
           shape:
             - 1
         gsr:
+          port: "AUX"
           channel: [72]
           dtype: "float32"
           shape:
             - 1
-        spo2:
-          channel: [78]
-          dtype: "float32"
-          shape:
-            - 1
+        # spo2:
+        #   port: DIGI
+        #   channel: [79]
+        #   dtype: "float32"
+        #   shape:
+        #     - 1
       
 
 consumer_specs: []

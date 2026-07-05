@@ -36,7 +36,6 @@ class TmsiDataContainer(DataContainer):
     def __init__(
         self,
         sensor_mapping: dict,
-        batch_send_rate_hz: Optional[int] = 20,
         sampling_rate_hz: Optional[int] = 1000,
         buf_len: Optional[int] = 100000,
         transmission_delay_period_s: Optional[int] = None,
@@ -46,7 +45,6 @@ class TmsiDataContainer(DataContainer):
 
         self._sensor_mapping = sensor_mapping
         self._sampling_rate_hz = sampling_rate_hz
-        self._batch_send_rate_hz = batch_send_rate_hz
         self._transmission_delay_period_s = transmission_delay_period_s
 
         self._define_data_notes()
@@ -70,6 +68,15 @@ class TmsiDataContainer(DataContainer):
             buf_len=buf_len,
             sampling_rate_hz=self._sampling_rate_hz,
             data_notes=self._data_notes["tmsi_data"]["counter"],
+        )
+        self.add_channel(
+            bundle_name="tmsi_data",
+            channel_name="status",
+            data_type="uint16",
+            sample_size=[1],
+            buf_len=buf_len,
+            sampling_rate_hz=self._sampling_rate_hz,
+            data_notes=self._data_notes["tmsi_data"]["status"],
         )
         self.add_channel(
             bundle_name="tmsi_data",
@@ -102,7 +109,7 @@ class TmsiDataContainer(DataContainer):
             [
                 (
                     "Notes",
-                    f"Electrocardiogram. Sampled at {self._sampling_rate_hz} Hz, received in bursts at {self._batch_send_rate_hz} Hz.",
+                    f"Electrocardiogram. Sampled at {self._sampling_rate_hz} Hz, received in bursts of variable length of samples.",
                 ),
                 (
                     "TMSi channel",
@@ -110,11 +117,11 @@ class TmsiDataContainer(DataContainer):
                 ),
             ]
         )
-        self._data_notes["tmsi_data"]["breath"] = OrderedDict(
+        self._data_notes["tmsi_data"]["respiration"] = OrderedDict(
             [
                 (
                     "Notes",
-                    f"Respiration rate measured by the abdominal circumference variation. Sampled at {self._sampling_rate_hz} Hz, received in bursts at {self._batch_send_rate_hz} Hz.",
+                    f"Respiration rate measured by the abdominal circumference variation. Sampled at {self._sampling_rate_hz} Hz, received in bursts of variable length of samples.",
                 ),
                 (
                     "TMSi channel",
@@ -126,7 +133,7 @@ class TmsiDataContainer(DataContainer):
             [
                 (
                     "Notes",
-                    f"Galvanic skin response. Sampled at {self._sampling_rate_hz} Hz, received in bursts at {self._batch_send_rate_hz} Hz.",
+                    f"Galvanic skin response. Sampled at {self._sampling_rate_hz} Hz, received in bursts of variable length of samples.",
                 ),
                 (
                     "TMSi channel",
@@ -138,11 +145,11 @@ class TmsiDataContainer(DataContainer):
             [
                 (
                     "Notes",
-                    f"Peripheral capillary oxygen saturation. Sampled at {self._sampling_rate_hz} Hz, received in bursts at {self._batch_send_rate_hz} Hz.",
+                    f"Peripheral capillary oxygen saturation. Sampled at {self._sampling_rate_hz} Hz, received in bursts of variable length of samples.",
                 ),
                 (
                     "TMSi channel",
-                    str(self._sensor_mapping.get("spo2", {"channel": [78]})["channel"]),
+                    str(self._sensor_mapping.get("spo2", {"channel": [79]})["channel"]),
                 ),
             ]
         )
@@ -154,11 +161,71 @@ class TmsiDataContainer(DataContainer):
                 ),
             ]
         )
+        self._data_notes["tmsi_data"]["status"] = OrderedDict(
+            [
+                (
+                    "Notes",
+                    f"16-bit sample set status mask. Value is an 'OR' of the following bits.",
+                ),
+                (
+                    "[0] bit (User)",
+                    "Marker event (0 - None; 1 - Button pressed)",
+                ),
+                (
+                    "[1] bit (User)",
+                    "Reference mode (0 - Average; 1 - Common)",
+                ),
+                (
+                    "[2] bit (Device)",
+                    "Reference switch (0 - None; 1 - Auto switch from Average to Common reference mode)",
+                ),
+                (
+                    "[3] bit (Device)",
+                    "Average reference removal (0 - Enabled; 1 - Disabled)",
+                ),
+                (
+                    "[4] bit (Device)",
+                    "Sync out (0 - LOW or in Event Marker mode; 1 - HIGH)",
+                ),
+                (
+                    "[5] bit (External)",
+                    "DIGI trigger IN (0 - Trigger HIGH or not connected; 1 - Trigger LOW)",
+                ),
+                (
+                    "[6-7] bit",
+                    "Undefined",
+                ),
+                (
+                    "[8] bit (Device)",
+                    "Dummy data (0 - Normal measurement data; 1 - NaN instead of real data)",
+                ),
+                (
+                    "[9] bit (Device)",
+                    "Ambulatory data (0 - See 'Sample data'; 1 - Packet contains ambulatory data)",
+                ),
+                (
+                    "[10] bit (Device)",
+                    "Sample data (0 - See 'Ambulatory data'; 1 - Packet contains live data)",
+                ),
+                (
+                    "[11-13] bit",
+                    "Undefined",
+                ),
+                (
+                    "[14] bit (Device)",
+                    "Bat1 low (0 - Battery 1 NOT LOW or not present; 1 - Battery 1 LOW)",
+                ),
+                (
+                    "[15] bit (Device)",
+                    "Bat2 low (0 - Battery 2 NOT LOW or not present; 1 - Battery 2 LOW)",
+                ),
+            ]
+        )
         self._data_notes["tmsi_data"]["toa_s"] = OrderedDict(
             [
                 (
                     "Notes",
-                    f"Time of arrival of the samples w.r.t. system clock. Repeated for samples arrived in the same burst. Changes at {self._batch_send_rate_hz} Hz",
+                    f"Time of arrival of the samples w.r.t. system clock. Repeated for samples arrived in the same burst.",
                 ),
             ]
         )
