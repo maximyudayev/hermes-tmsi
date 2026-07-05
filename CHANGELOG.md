@@ -7,6 +7,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.1.1](https://github.com/maximyudayev/hermes-tmsi/releases/tag/0.1.1) - 2026-07-05
+
+<small>[Compare with 0.1.0](https://github.com/maximyudayev/hermes-tmsi/compare/0.1.0...0.1.1)</small>
+
+### Features
+
+- Reliable TMSi SAGA ([541defd](https://github.com/maximyudayev/hermes-tmsi/commit/541defdc2eb68dd64dd163c9ffed4bf2f1efe2c2) by Maxim Yudayev).
+
+### Bug Fixes
+
+- One of BIP-01 channels not enabled ([15afd9a](https://github.com/maximyudayev/hermes-tmsi/commit/15afd9a532c140a2fec034879fdfbab82e367426) by Maxim Yudayev).
+
+### Misc
+
+- Hotfix: API compatibility to `HERMES==0.4.2` ([ab88409](https://github.com/maximyudayev/hermes-tmsi/commit/ab88409ecde9b8dec84cdbf6f5a52cce2fd48912) by Maxim Yudayev).
+
 ## [0.1.0](https://github.com/maximyudayev/hermes-tmsi/releases/tag/0.1.0) - 2026-06-21
 
 <small>[Compare with first commit](https://github.com/maximyudayev/hermes-tmsi/compare/821f542ca65a927587b1ec0a4f80e898a9024ff6...0.1.0)</small>
