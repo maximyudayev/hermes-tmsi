@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.2.0](https://github.com/maximyudayev/hermes-tmsi/releases/tag/0.2.0) - 2026-07-12
+
+<small>[Compare with 0.1.1](https://github.com/maximyudayev/hermes-tmsi/compare/0.1.1...0.2.0)</small>
+
+### Misc
+- Chore: updated to macth HERMES>=0.5.0 ([69254f5](https://github.com/maximyudayev/hermes-tmsi/commit/69254f5f221d7d1fd3d993a608ce262a36628f31) by Maxim Yudayev).
+
 ## [0.1.1](https://github.com/maximyudayev/hermes-tmsi/releases/tag/0.1.1) - 2026-07-05
 
 <small>[Compare with 0.1.0](https://github.com/maximyudayev/hermes-tmsi/compare/0.1.0...0.1.1)</small>
