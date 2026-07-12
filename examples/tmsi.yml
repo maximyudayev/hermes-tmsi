@@ -58,7 +58,7 @@ audio_codec_config_filepath: null
 producer_specs:
   - package: "tmsi"
     class: "TmsiProducer"
-    topic: "tmsi"
+    node_id: "tmsi"
     settings:
       base_sample_rate: "Decimal"
       sample_rate_divider: 4
@@ -88,9 +88,42 @@ producer_specs:
         #   dtype: "float32"
         #   shape:
         #     - 1
-      
 
-consumer_specs: []
+
+consumer_specs:
+  - package: "logger"
+    class: "DataLogger"
+    node_id: "data_logger"
+    settings:
+      data_in_specs:
+        - package: "tmsi"
+          class: "TmsiProducer"
+          node_id: "tmsi"
+          topics:
+            - "tmsi_data"
+          settings:
+            base_sample_rate: "Decimal"
+            sample_rate_divider: 4
+            buf_len: 100000
+            sensor_mapping:
+              ecg:
+                port: "BIP"
+                channel: [65]
+                dtype: "float32"
+                shape:
+                  - 1
+              respiration:
+                port: "AUX"
+                channel: [69]
+                dtype: "float32"
+                shape:
+                  - 1
+              gsr:
+                port: "AUX"
+                channel: [72]
+                dtype: "float32"
+                shape:
+                  - 1
 
 
 pipeline_specs: []

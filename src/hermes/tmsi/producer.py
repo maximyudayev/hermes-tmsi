@@ -56,7 +56,7 @@ class TmsiProducer(Producer):
 
     def __init__(
         self,
-        topic: str,
+        node_id: str,
         host_ip: str,
         logging_spec: LoggingSpec,
         sensor_mapping: dict,
@@ -78,7 +78,7 @@ class TmsiProducer(Producer):
         }
 
         super().__init__(
-            topic=topic,
+            node_id=node_id,
             host_ip=host_ip,
             data_out_spec=data_out_spec,
             logging_spec=logging_spec,
@@ -265,10 +265,9 @@ class TmsiProducer(Producer):
             sample_block = np.array(
                 array_to_matrix(new_data.samples, new_data.num_samples_per_sample_set)
             )
-            tag: str = "%s.data" % self.topic
 
             data = self.build_data_dict_fn(sample_block, toa_s)
-            self._publish(tag=tag, process_time_s=get_time(), data=data)
+            self._publish(process_time_s=get_time(), new_data=data)
         except queue.Empty:
             if not self._is_continue_capture:
                 self._send_end_packet()
